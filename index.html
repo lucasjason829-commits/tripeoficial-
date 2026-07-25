@@ -3,216 +3,343 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Protocolo TRIPE - Oficial</title>
+    <meta name="theme-color" content="#050505">
+    <title>Consulta Profissional - Protocolo BICARBONATO</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #ef4444; --bg: #0a0a0a; --card: #141414; --text: #ffffff; --muted: #9ca3af; --border: #262626; }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .quiz-card { width: 100%; max-width: 450px; background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); text-align: center; }
-        .fixed-header { font-size: 10px; font-weight: 900; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
-        .progress-bar { height: 4px; background: var(--border); border-radius: 10px; margin-bottom: 30px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s ease; }
-        .question-title { font-size: 24px; font-weight: 900; margin-bottom: 15px; line-height: 1.3; }
-        .options-grid { display: grid; gap: 12px; margin-bottom: 25px; }
-        .option-btn { background: var(--card); border: 2px solid var(--border); color: var(--text); padding: 16px; border-radius: 12px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
-        .option-btn.selected { border-color: var(--primary); background: rgba(239, 68, 68, 0.2); }
-        .btn-next { background: var(--primary); color: white; border: none; padding: 18px; border-radius: 12px; font-weight: 900; cursor: pointer; width: 100%; font-size: 16px; }
-        .screen { display: none; }
-        .screen.active { display: block; }
-        .urgency-badge { background: rgba(239, 68, 68, 0.2); border: 2px solid var(--primary); padding: 10px 15px; border-radius: 50px; display: inline-block; margin-bottom: 20px; font-weight: 900; color: var(--primary); font-size: 12px; }
-        .carousel { width: 100%; height: 250px; background: #000; border-radius: 15px; margin: 15px 0; overflow: hidden; position: relative; border: 1px solid var(--border); }
-        .slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.6s ease; }
-        .slide.active { opacity: 1; }
-        .slide img { width: 100%; height: 100%; object-fit: cover; }
-        .slide-info { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.8); padding: 8px; font-size: 12px; }
-        .loading-bar-container { text-align: left; margin-bottom: 12px; }
-        .loading-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; display: block; }
-        .loading-bar { height: 6px; background: var(--border); border-radius: 10px; overflow: hidden; }
-        .loading-fill { height: 100%; background: var(--primary); width: 0%; animation: load 2s infinite; }
-        @keyframes load { 0% { width: 0%; } 50% { width: 100%; } 100% { width: 100%; } }
-        .result-badge { background: var(--primary); color: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; font-weight: 900; font-size: 28px; }
+        :root{--primary:#ef4444;--bg:#050505;--card:#111111;--text:#ffffff;--muted:#9ca3af;--border:#262626;--green:#22c55e}
+        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+        html,body{height:100%;overflow-x:hidden}
+        body{font-family:'Inter',sans-serif;background-color:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:16px}
+        .quiz-card{width:100%;max-width:550px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:clamp(18px,5vw,30px);box-shadow:0 20px 40px rgba(0,0,0,.6);text-align:center}
+        .fixed-header{font-size:clamp(9px,2.5vw,11px);font-weight:900;color:var(--primary);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px}
+        .headline{font-size:clamp(22px,6vw,30px);font-weight:900;color:#fff;margin-bottom:12px;line-height:1.2;text-transform:uppercase}
+        .sub-headline{font-size:clamp(13px,3.5vw,15px);color:var(--primary);font-weight:700;margin-bottom:18px}
+        .btn-next{background:var(--primary);color:#fff;border:none;padding:clamp(16px,4vw,22px);border-radius:14px;font-weight:900;cursor:pointer;width:100%;font-size:clamp(16px,4.5vw,20px);text-transform:uppercase;transition:all .3s;box-shadow:0 10px 20px rgba(239,68,68,.3);margin-top:20px;line-height:1.2}
+        .btn-next:hover{transform:scale(1.02)}.btn-next:active{transform:scale(.98)}
+        .screen{display:none}.screen.active{display:block}
+        .progress-bar{height:6px;background:var(--border);border-radius:10px;margin-bottom:24px;overflow:hidden}
+        .progress-fill{height:100%;background:var(--primary);width:0%;transition:width .4s ease}
+        .options-grid{display:grid;gap:12px;margin-bottom:20px}
+        .option-btn{background:var(--card);border:2px solid var(--border);color:var(--text);padding:clamp(14px,4vw,18px) clamp(12px,3vw,16px);border-radius:12px;cursor:pointer;font-weight:700;transition:all .2s;font-size:clamp(14px,3.8vw,16px);text-align:left;line-height:1.3;width:100%;display:flex;align-items:center;gap:12px}
+        .option-btn:hover,.option-btn:active{border-color:var(--primary);background:rgba(239,68,68,.1)}
+        .option-btn svg{flex-shrink:0;width:20px;height:20px;opacity:.75}
+        .urgency-badge{background:rgba(34,197,94,.15);border:2px solid var(--green);padding:10px 14px;border-radius:50px;display:inline-block;margin-bottom:18px;font-weight:900;color:var(--green);font-size:clamp(10px,2.8vw,12px);line-height:1.3}
+        .carousel{width:100%;height:clamp(180px,45vw,250px);background:#000;border-radius:14px;margin:14px 0;overflow:hidden;position:relative;border:1px solid var(--border)}
+        .slide{position:absolute;inset:0;opacity:0;transition:opacity .6s ease;display:flex;align-items:center;justify-content:center}
+        .slide.active{opacity:1}.slide img{width:100%;height:100%;object-fit:contain}
+        .slide-caption{position:absolute;bottom:8px;left:8px;right:8px;background:rgba(0,0,0,.85);padding:7px 10px;border-radius:8px;font-size:clamp(9px,2.5vw,11px);font-weight:700;color:var(--green);border:1px solid rgba(34,197,94,.3);text-align:center;z-index:10}
+        .analysis-dashboard{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+        .metric-card{background:#0a0a0a;border:1px solid var(--border);border-radius:12px;padding:14px 12px;text-align:center;position:relative;overflow:hidden;transition:border-color .4s ease}
+        .metric-card.active{border-color:var(--primary)}.metric-card.done{border-color:var(--green)}
+        .metric-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--border);transition:background .4s ease}
+        .metric-card.active::before{background:var(--primary)}.metric-card.done::before{background:var(--green)}
+        .metric-label{font-size:clamp(8px,2.2vw,10px);font-weight:900;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px;transition:color .4s;line-height:1.3}
+        .metric-card.done .metric-label{color:#fff}
+        .metric-status{font-size:clamp(7px,2vw,9px);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:4px;color:var(--muted);transition:color .4s}
+        .metric-card.active .metric-status{color:var(--primary)}.metric-card.done .metric-status{color:var(--green)}
+        .gauge-wrap{position:relative;width:56px;height:56px;margin:0 auto 8px}
+        .gauge-svg{transform:rotate(-90deg)}
+        .gauge-bg{fill:none;stroke:#222;stroke-width:4}
+        .gauge-fill{fill:none;stroke-width:4;stroke-linecap:round;stroke-dasharray:138.23;stroke-dashoffset:138.23;transition:stroke-dashoffset .8s ease,stroke .4s ease}
+        .gauge-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:var(--muted)}
+        .analysis-center{grid-column:span 2;background:#0a0a0a;border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;align-items:center;gap:14px;text-align:left;transition:border-color .4s,background .4s}
+        .analysis-center.done{border-color:var(--green);background:rgba(34,197,94,.05)}
+        .center-icon{width:40px;height:40px;flex-shrink:0}
+        .center-label{font-size:clamp(9px,2.5vw,11px);font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+        .center-value{font-size:clamp(14px,4vw,17px);font-weight:900;color:#fff}
+        .result-hero{background:linear-gradient(135deg,rgba(34,197,94,.15),rgba(34,197,94,.05));border:3px solid var(--green);padding:clamp(16px,4vw,24px) clamp(14px,3.5vw,22px);border-radius:20px;margin:20px 0;box-shadow:0 15px 40px rgba(34,197,94,.2);text-align:center}
+        .result-label{font-size:clamp(10px,2.8vw,12px);color:#9ca3af;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:6px}
+        .result-number{font-size:clamp(30px,8vw,38px);font-weight:900;color:var(--green);line-height:1;margin:8px 0;text-shadow:0 0 20px rgba(34,197,94,.45);letter-spacing:-1px}
+        .result-subtext{font-size:clamp(12px,3.2vw,15px);color:#d1d5db;margin-top:10px;font-weight:600;line-height:1.4}
+        .urgency-timer{background:rgba(239,68,68,.1);border:2px solid #ef4444;padding:11px 14px;border-radius:12px;margin:18px 0;font-size:clamp(11px,3vw,13px);font-weight:900;color:#ef4444;line-height:1.4}
+        .benefit-list{text-align:left;margin:20px 0}
+        .benefit-item{display:flex;align-items:flex-start;margin-bottom:14px;font-size:clamp(13px,3.5vw,15px);font-weight:700;color:#fff;line-height:1.4}
+        .benefit-item span{color:var(--green);margin-right:10px;font-size:clamp(16px,4vw,20px);flex-shrink:0;margin-top:-1px}
+        .guarantee-box{display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.05);padding:clamp(12px,3vw,15px);border-radius:12px;margin:18px 0;border:1px dashed #444;gap:14px}
+        .guarantee-badge{width:clamp(40px,10vw,50px);height:auto;flex-shrink:0}
+        .guarantee-text{text-align:left}.guarantee-text p{font-size:clamp(11px,3vw,13px);line-height:1.4}
+        .social-proof-live{font-size:clamp(11px,3vw,13px);color:var(--green);font-weight:700;margin:14px 0}
+        .question-text{font-size:clamp(17px,4.8vw,22px);font-weight:900;margin-bottom:18px;line-height:1.35;text-align:left}
+
+        /* ===== VIDEO PLAYER ===== */
+        .video-wrap{position:relative;width:100%;background:#000;border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border);aspect-ratio:9/16}
+        .video-wrap video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+
+        .video-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;z-index:20;gap:12px}
+        .video-loading.hidden{display:none}
+        .vl-spinner{width:36px;height:36px;border:3px solid #333;border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
+        .vl-text{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+
+        .play-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:15;pointer-events:none;opacity:0;transition:opacity .25s}
+        .play-overlay.visible{opacity:1}
+        .play-overlay-btn{width:64px;height:64px;background:rgba(0,0,0,.65);border-radius:50%;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);border:2px solid rgba(255,255,255,.2)}
+        .play-overlay-btn svg{width:28px;height:28px;fill:#fff;margin-left:4px}
+
+        .player-controls{position:absolute;bottom:0;left:0;right:0;z-index:30;background:linear-gradient(transparent, rgba(0,0,0,.85));padding:28px 12px 10px}
+        .player-seekbar{width:100%;height:4px;background:rgba(255,255,255,.2);border-radius:10px;cursor:pointer;position:relative;margin-bottom:8px;transition:height .15s}
+        .player-seekbar:hover{height:6px}
+        .player-seekbar-fill{height:100%;background:var(--primary);border-radius:10px;pointer-events:none;position:relative;box-shadow:0 0 6px rgba(239,68,68,.5)}
+        .player-seekbar-thumb{position:absolute;right:-5px;top:50%;transform:translateY(-50%);width:10px;height:10px;background:#fff;border-radius:50%;box-shadow:0 0 4px rgba(0,0,0,.5)}
+        .player-bottom{display:flex;align-items:center;gap:10px}
+        .player-btn{background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .player-btn svg{width:22px;height:22px;fill:#fff;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
+        .player-time{font-size:11px;font-weight:700;color:rgba(255,255,255,.85);letter-spacing:.5px;flex:1;text-align:left}
+        .player-vol svg{transition:opacity .2s}
+        .player-vol.muted svg{opacity:.4}
+
+        .video-hint{
+            display:flex;align-items:center;justify-content:center;gap:8px;
+            background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.35);
+            border-radius:10px;padding:10px 14px;margin-bottom:16px;
+            animation:pulse-hint 2s ease-in-out infinite;
+        }
+        .video-hint-icon{font-size:18px;flex-shrink:0}
+        .video-hint-text{font-size:clamp(12px,3.2vw,14px);font-weight:900;color:#fff;line-height:1.35;text-align:left}
+        .video-hint-text span{color:var(--primary)}
+        @keyframes pulse-hint{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.25)}50%{box-shadow:0 0 0 6px rgba(239,68,68,.0)}}
+        @keyframes spin{to{transform:rotate(360deg)}}
+
+        .secure-footer{font-size:clamp(10px,2.5vw,11px);color:var(--muted);margin-top:14px;line-height:1.5}
+        .analysis-spinner-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:18px}
+        .spinner-ring{width:48px;height:48px;border:3px solid #222;border-top-color:var(--primary);border-radius:50%;animation:spin .9s linear infinite}
+        .spinner-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+        @media(max-width:380px){body{padding:10px}.quiz-card{padding:16px 14px;border-radius:16px}.btn-next{padding:15px;font-size:15px}}
+        @media(max-height:700px){.carousel{height:160px}}
     </style>
 </head>
 <body>
-    <div class="quiz-card">
-        <div id="s-0" class="screen active">
-            <div class="fixed-header">AVALIAÇÃO PERSONALIZADA - MÉTODO TRIPE</div>
-            <div class="question-title" id="sal-title">VOCÊ ESTÁ A UM PASSO...</div>
-            <p style="color: var(--muted); margin-bottom: 25px;" id="sal-sub">De descobrir seu verdadeiro potencial sexual</p>
-            <button class="btn-next" onclick="next()">INICIAR AGORA</button>
-        </div>
-        <div id="s-1" class="screen">
-            <div class="fixed-header">AVALIAÇÃO PERSONALIZADA - MÉTODO TRIPE</div>
-            <div class="progress-bar"><div class="progress-fill" id="p-fill"></div></div>
-            <div id="q-box"></div>
-        </div>
-        <div id="s-2" class="screen">
-            <div class="urgency-badge">🔥 164 homens avaliando agora</div>
-            <div class="fixed-header">PROCESSANDO SEUS DADOS...</div>
-            <div class="carousel">
-                <div class="slide active">
-                    <img src="https://metodotripe.shop/wp-content/uploads/2026/01/22109742.jpg">
-                    <div class="slide-info"><strong>Ricardo, 34 anos</strong> • +4.2cm em 28 dias</div>
-                </div>
-                <div class="slide">
-                    <img src="https://metodotripe.shop/wp-content/uploads/2026/01/meaSaaTbaAaaaamhD_iLJzfk9u2QO-ZC1.jpg">
-                    <div class="slide-info"><strong>Marcelo, 41 anos</strong> • +3.8cm em 30 dias</div>
-                </div>
-                <div class="slide">
-                    <img src="https://metodotripe.shop/wp-content/uploads/2026/01/paciente-D-antes-e-depois-alongamento-peniano-faloplastia-fotor-20260119195743.png">
-                    <div class="slide-info"><strong>Felipe, 28 anos</strong> • +5.1cm em 35 dias</div>
-                </div>
-                <div class="slide">
-                    <img src="https://metodotripe.shop/wp-content/uploads/2024/12/WhatsApp-Image-2024-12-18-at-15.11.46-rcl53qv1p0gr5r30gvvchnyybvpbhth13gqhj4.jpeg">
-                    <div class="slide-info"><strong>João, 45 anos</strong> • +4.5cm em 32 dias</div>
-                </div>
-                <div class="slide">
-                    <img src="https://metodotripe.shop/wp-content/uploads/2026/01/Fotos-de-penis-grande10.jpg">
-                    <div class="slide-info"><strong>Marcos, 39 anos</strong> • +4.8cm em 29 dias</div>
+<div class="quiz-card">
+
+    <!-- TELA 1: VÍDEO -->
+    <div id="s-0" class="screen active">
+        <div class="fixed-header">PROTOCOLO BICARBONATO — 3 INGREDINTES</div>
+        <h1 class="headline">O SEGREDO DOS ATORES PÔRNO PARA ATIVAR O CRESCIMENTO DO PÊNIS EM 45 DIAS.</h1>
+        <p class="sub-headline">AUMENTE SEU PÊNIS ATÉ 7CM EM 45 DIAS SEM CIRURGIA OU APARELHOS VEJA O VÍDEO</p>
+
+        <div class="video-wrap" id="video-wrap">
+            <div class="video-loading" id="video-loading">
+                <div class="vl-spinner"></div>
+                <div class="vl-text">Carregando vídeo...</div>
+            </div>
+            <video id="main-video" playsinline webkit-playsinline preload="auto">
+                <source src="https://doram.shop/wp-content/uploads/2026/03/0322-1.mp4" type="video/mp4">
+            </video>
+            <div class="play-overlay" id="play-overlay">
+                <div class="play-overlay-btn">
+                    <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
                 </div>
             </div>
-            <div id="loading-steps">
-                <div class="loading-bar-container"><span class="loading-label">✓ Analisando tecidos cavernosos...</span><div class="loading-bar"><div class="loading-fill"></div></div></div>
-                <div class="loading-bar-container"><span class="loading-label">⏳ Verificando densidade dos corpos cavernosos...</span><div class="loading-bar"><div class="loading-fill" style="animation-delay: 0.5s"></div></div></div>
-                <div class="loading-bar-container"><span class="loading-label">⏳ Ajustando protocolo de expansão celular...</span><div class="loading-bar"><div class="loading-fill" style="animation-delay: 1s"></div></div></div>
-                <div class="loading-bar-container"><span class="loading-label">⏳ Validando compatibilidade de tecidos...</span><div class="loading-bar"><div class="loading-fill" style="animation-delay: 1.5s"></div></div></div>
+            <div class="player-controls">
+                <div class="player-seekbar" id="seekbar">
+                    <div class="player-seekbar-fill" id="seekbar-fill" style="width:0%">
+                        <div class="player-seekbar-thumb"></div>
+                    </div>
+                </div>
+                <div class="player-bottom">
+                    <button class="player-btn" id="play-btn" onclick="togglePlay()">
+                        <svg id="icon-pause" viewBox="0 0 24 24"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>
+                        <svg id="icon-play" viewBox="0 0 24 24" style="display:none"><polygon points="5,3 19,12 5,21"/></svg>
+                    </button>
+                    <span class="player-time" id="player-time">0:00 / 0:00</span>
+                    <button class="player-btn player-vol" id="vol-btn" onclick="toggleMute()" style="cursor:pointer">
+                        <svg id="icon-vol-on" viewBox="0 0 24 24">
+                            <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                            <path d="M19.07 4.93a10 10 0 010 14.14" stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none"/>
+                            <path d="M15.54 8.46a5 5 0 010 7.07" stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none"/>
+                        </svg>
+                        <svg id="icon-vol-off" viewBox="0 0 24 24" style="display:none">
+                            <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                            <line x1="23" y1="9" x2="17" y2="15" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="17" y1="9" x2="23" y2="15" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
-            <p style="font-size: 12px; color: var(--muted); margin-top: 15px;">Comparando com 10.847 casos de sucesso...</p>
         </div>
-        <div id="s-3" class="screen">
-            <div class="fixed-header">RESULTADO GERADO</div>
-            <div class="result-badge" id="res-val">+4.5cm</div>
-            <p style="margin-bottom: 20px; color: var(--muted);" id="res-text">Você pode ganhar até <strong style="color: white" id="res-txt"></strong> em 30 dias.</p>
-            <button class="btn-next" onclick="finish()" id="cta-btn">ACESSAR PROTOCOLO TRIPE</button>
+
+        <div class="video-hint" id="video-hint">
+            <div class="video-hint-icon">👆</div>
+            <div class="video-hint-text">
+                <span>Toque no vídeo</span> para assistir com som!<br>
+                Ative o áudio para ver o protocolo completo.
+            </div>
+        </div>
+
+        <button class="btn-next" onclick="goNext()">🔓 LIBERAR MINHA FÓRMULA AGORA</button>
+    </div>
+
+    <!-- TELA 2: AUTORIDADE -->
+    <div id="s-1" class="screen">
+        <div class="fixed-header">AVALIAÇÃO PERSONALIZADA GRATUITA</div>
+        <h2 class="headline">DESCUBRA QUANTO VOCÊ PODE CRESCER EM 45 DIAS</h2>
+        <div class="urgency-badge">🟢 <span id="online-count-val">147</span> HOMENS FAZENDO AVALIAÇÃO AGORA</div>
+        <div class="carousel" id="authority-carousel">
+            <div class="slide active"><img src="https://metodotripe.shop/wp-content/uploads/2026/02/02-.jpg" alt="Resultado"><div class="slide-caption">PACIENTE M. SOUZA: +5.8cm (VALIDADO ✓)</div></div>
+            <div class="slide"><img src="https://metodotripe.shop/wp-content/uploads/2026/01/22109742.jpg" alt="Resultado"><div class="slide-caption">PACIENTE R. OLIVEIRA: +4.9cm (VALIDADO ✓)</div></div>
+            <div class="slide"><img src="https://metodotripe.shop/wp-content/uploads/2026/01/meaSaaTbaAaaaamhD_iLJzfk9u2QO-ZC1.jpg" alt="Estudo"><div class="slide-caption">ESTUDO CLÍNICO: EXPANSÃO TECIDUAL ATIVA</div></div>
+        </div>
+        <button class="btn-next" onclick="next()">INICIAR MINHA AVALIAÇÃO GRATUITA</button>
+    </div>
+
+    <!-- TELA 3: QUIZ -->
+    <div id="s-2" class="screen">
+        <div class="fixed-header">AVALIAÇÃO CLÍNICA — ETAPA <span id="q-num">1</span>/5</div>
+        <div class="progress-bar"><div class="progress-fill" id="p-fill"></div></div>
+        <div id="q-box"></div>
+    </div>
+
+    <!-- TELA 4: PROCESSAMENTO -->
+    <div id="s-3" class="screen">
+        <div class="fixed-header">SISTEMA DE DIAGNÓSTICO AVANÇADO</div>
+        <h2 style="font-size:clamp(16px,4.5vw,20px);font-weight:900;margin-bottom:18px">ANALISANDO SEUS DADOS BIOMÉTRICOS</h2>
+        <div class="analysis-spinner-wrap" id="spinner-wrap"><div class="spinner-ring"></div><div class="spinner-label" id="spinner-label">Inicializando...</div></div>
+        <div class="analysis-dashboard">
+            <div class="metric-card" id="mc-1"><div class="gauge-wrap"><svg class="gauge-svg" width="56" height="56" viewBox="0 0 56 56"><circle class="gauge-bg" cx="28" cy="28" r="22"/><circle class="gauge-fill" id="gf-1" cx="28" cy="28" r="22" stroke="#ef4444"/></svg><div class="gauge-text" id="gv-1">—</div></div><div class="metric-label">Expansão Tecidual</div><div class="metric-status" id="ms-1">Aguardando</div></div>
+            <div class="metric-card" id="mc-2"><div class="gauge-wrap"><svg class="gauge-svg" width="56" height="56" viewBox="0 0 56 56"><circle class="gauge-bg" cx="28" cy="28" r="22"/><circle class="gauge-fill" id="gf-2" cx="28" cy="28" r="22" stroke="#ef4444"/></svg><div class="gauge-text" id="gv-2">—</div></div><div class="metric-label">Potencial de Crescimento</div><div class="metric-status" id="ms-2">Aguardando</div></div>
+            <div class="metric-card" id="mc-3"><div class="gauge-wrap"><svg class="gauge-svg" width="56" height="56" viewBox="0 0 56 56"><circle class="gauge-bg" cx="28" cy="28" r="22"/><circle class="gauge-fill" id="gf-3" cx="28" cy="28" r="22" stroke="#ef4444"/></svg><div class="gauge-text" id="gv-3">—</div></div><div class="metric-label">Índice Vascular</div><div class="metric-status" id="ms-3">Aguardando</div></div>
+            <div class="metric-card" id="mc-4"><div class="gauge-wrap"><svg class="gauge-svg" width="56" height="56" viewBox="0 0 56 56"><circle class="gauge-bg" cx="28" cy="28" r="22"/><circle class="gauge-fill" id="gf-4" cx="28" cy="28" r="22" stroke="#ef4444"/></svg><div class="gauge-text" id="gv-4">—</div></div><div class="metric-label">Resposta Hormonal</div><div class="metric-status" id="ms-4">Aguardando</div></div>
+            <div class="analysis-center" id="mc-center"><svg class="center-icon" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" stroke="#333" stroke-width="2"/><path d="M12 20l5 5 11-10" stroke="#444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" id="check-path"/></svg><div><div class="center-label">Compatibilidade com Protocolo</div><div class="center-value" id="center-value">Calculando...</div></div></div>
         </div>
     </div>
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, set, update, get, serverTimestamp, increment } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-        const firebaseConfig = {
-            apiKey: "AIzaSyCDYmSVU2xVVuLw0vu3svKI7n4hvdxjW0w",
-            authDomain: "projeto-tripe-oficial.firebaseapp.com",
-            databaseURL: "https://projeto-tripe-oficial-default-rtdb.firebaseio.com",
-            projectId: "projeto-tripe-oficial",
-            storageBucket: "projeto-tripe-oficial.firebasestorage.app",
-            messagingSenderId: "274742031259",
-            appId: "1:274742031259:web:18dc5c086fe3d58b56673e"
-        };
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        const sid = 's_' + Date.now();
-        let step = 0, qIdx = 0, variantIdx = 0, stepStartTime = 0;
 
-        const SALUTATIONS = [
-            { title: "VOCÊ ESTÁ A UM PASSO...", subtitle: "De descobrir seu verdadeiro potencial sexual" },
-            { title: "ESPERA ABRINDO...", subtitle: "Seu diagnóstico de ganho peniano personalizado" },
-            { title: "CARREGANDO PROTOCOLO...", subtitle: "Que vai transformar sua vida sexual" },
-            { title: "INICIANDO AVALIAÇÃO...", subtitle: "Baseada em 10.847 casos de sucesso" },
-            { title: "PREPARANDO RESULTADO...", subtitle: "Que vai surpreender você" }
-        ];
+    <!-- TELA 5: OFERTA -->
+    <div id="s-4" class="screen">
+        <div class="fixed-header">✓ AVALIAÇÃO CONCLUÍDA</div>
+        <h2 style="font-size:clamp(17px,4.8vw,20px);font-weight:900;margin-bottom:18px">SEU PLANO PERSONALIZADO DE 45 DIAS ESTÁ PRONTO</h2>
+        <div class="result-hero"><div class="result-label">VOCÊ PODE GANHAR</div><div class="result-number">4 – 7 CM</div><div class="result-label">DE COMPRIMENTO + GROSSURA</div><p class="result-subtext">Baseado no seu nível vascular, histórico de ereção e urgência declarada</p></div>
+        <div class="urgency-timer">⚠️ <span id="access-count">47</span> HOMENS PEGARAM ACESSO NAS ÚLTIMAS 4 HORAS</div>
+        <div class="benefit-list">
+            <div class="benefit-item"><span>✓</span> Ganhe de 3 a 7cm de comprimento PERMANENTE</div>
+            <div class="benefit-item"><span>✓</span> Primeiras medições visíveis em apenas 21 dias</div>
+            <div class="benefit-item"><span>✓</span> Ereções 3x mais firmes e duradouras a partir do dia 30</div>
+            <div class="benefit-item"><span>✓</span> Zero cirurgias, aparelhos ou medicamentos</div>
+            <div class="benefit-item"><span>✓</span> Ela vai SENTIR a diferença (e te agradecer)</div>
+            <div class="benefit-item"><span>✓</span> Garantia incondicional de 30 dias</div>
+        </div>
+        <div class="social-proof-live">🟢 <span id="live-watching">23</span> pessoas visualizando esta oferta agora</div>
+        <div class="guarantee-box"><img src="https://metodotripe.shop/wp-content/uploads/2026/04/ChatGPT-Image-19-de-abr.-de-2026-19_12_11-1.png" class="guarantee-badge" alt="Garantia"><div class="guarantee-text"><p style="font-weight:900;color:#fff">MÉTODO BICARBONATO</p><p style="font-weight:900;color:var(--green)">GARANTIA TOTAL DE 30 DIAS</p><p style="color:var(--muted)">Satisfação 100% ou seu dinheiro de volta</p></div></div>
+        <button class="btn-next" onclick="finish()">ACESSAR MEU PLANO DE 45 DIAS AGORA</button>
+        <p class="secure-footer">🔒 Compra 100% Segura e Sigilosa • Acesso Imediato</p>
+    </div>
 
-        const RESULTS_COPY = [
-            "Você pode ganhar até {val} em 30 dias.",
-            "Diagnóstico: Seu potencial é de {val}.",
-            "ATENÇÃO: Você tem um potencial reprimido de {val}.",
-            "Resultado: Seu membro pode atingir {val} extras.",
-            "Parabéns! Você pode ganhar {val} em 4 semanas."
-        ];
+</div>
 
-        const CTA_COPY = [
-            "ACESSAR PROTOCOLO TRIPE",
-            "QUERO MEU MEMBRO MAIOR AGORA",
-            "LIBERAR ACESSO AO MÉTODO",
-            "COMEÇAR MINHA TRANSFORMAÇÃO",
-            "SIM! QUERO AUMENTAR MEU PÊNIS"
-        ];
+<script>
+const CHECKOUT = 'https://pay.wiapy.com/mm3kNpGy6Q';
+const vid = document.getElementById('main-video');
+const loadingEl = document.getElementById('video-loading');
+const seekbarFill = document.getElementById('seekbar-fill');
+const seekbar = document.getElementById('seekbar');
+const playerTime = document.getElementById('player-time');
+const iconPlay = document.getElementById('icon-play');
+const iconPause = document.getElementById('icon-pause');
+const playOverlay = document.getElementById('play-overlay');
+const iconVolOn = document.getElementById('icon-vol-on');
+const iconVolOff = document.getElementById('icon-vol-off');
+const videoHint = document.getElementById('video-hint');
 
-        const qs = [
-            { id: 'ereção', t: 'Qual sua frequência de ereção matinal?', o: ['Quase nunca', 'Raramente', 'Às vezes', 'Frequentemente', 'Sempre'] },
-            { id: 'sono', t: 'Quantas horas você dorme por noite?', o: ['Menos de 5h', '5-6h', '6-7h', '7-8h', 'Mais de 8h'] },
-            { id: 'dieta', t: 'Como é sua alimentação?', o: ['Muito ruim', 'Ruim', 'Média', 'Boa', 'Excelente'] },
-            { id: 'exercicio', t: 'Qual sua frequência de exercícios?', o: ['Nunca', '1-2x/semana', '3-4x/semana', '5-6x/semana', 'Diariamente'] },
-            { id: 'estresse', t: 'Como você avalia seu nível de estresse?', o: ['Muito alto', 'Alto', 'Moderado', 'Baixo', 'Muito baixo'] },
-            { id: 'desempenho', t: 'Como é seu desempenho sexual?', o: ['Muito ruim', 'Ruim', 'Médio', 'Bom', 'Excelente'] },
-            { id: 'duracao', t: 'Quanto tempo você dura na cama?', o: ['Menos de 2min', '2-5min', '5-10min', '10-15min', 'Mais de 15min'] }
-        ];
+function fmtTime(s){
+    if(isNaN(s)||s===Infinity) return '0:00';
+    var m=Math.floor(s/60), sec=Math.floor(s%60);
+    return m+':'+(sec<10?'0':'')+sec;
+}
+function updateIcons(playing){
+    iconPlay.style.display  = playing ? 'none'  : 'block';
+    iconPause.style.display = playing ? 'block' : 'none';
+    if(playing){ playOverlay.classList.remove('visible'); }
+    else        { playOverlay.classList.add('visible');   }
+}
+function updateVolIcon(){
+    iconVolOn.style.display  = vid.muted ? 'none'  : 'block';
+    iconVolOff.style.display = vid.muted ? 'block' : 'none';
+}
 
-        window.next = () => {
-            if (step === 0) { step = 1; render(); }
-            else if (step === 1) {
-                if (qIdx < qs.length - 1) { qIdx++; render(); }
-                else { step = 2; render(); startProcessing(); }
-            }
-        };
+vid.muted = true;
+updateVolIcon();
 
-        window.sel = (id, val) => {
-            const hesitation = Date.now() - stepStartTime;
-            update(ref(db, 'sessions/'+sid), { [id]: val, lastUpdate: serverTimestamp(), currentStep: qIdx + 1 });
-            update(ref(db, 'optimization/metrics/hesitation/'+qIdx), { [sid]: hesitation });
-            window.next();
-        };
+setTimeout(function(){
+    loadingEl.classList.add('hidden');
+    vid.play().then(function(){ updateIcons(true); })
+             .catch(function(e){ console.log('Autoplay bloqueado:', e); updateIcons(false); });
+}, 1000);
 
-        function render() {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById('s-' + step).classList.add('active');
-            if (step === 0) {
-                const sal = SALUTATIONS[variantIdx];
-                document.getElementById('sal-title').textContent = sal.title;
-                document.getElementById('sal-sub').textContent = sal.subtitle;
-            }
-            if (step === 1) {
-                const q = qs[qIdx];
-                document.getElementById('p-fill').style.width = ((qIdx+1)/qs.length*100) + '%';
-                document.getElementById('q-box').innerHTML = `<div class="question-title">${q.t}</div><div class="options-grid">${q.o.map((o, i) => `<button class="option-btn" onclick="sel('${q.id}', ${i})">${o}</button>`).join('')}</div>`;
-                stepStartTime = Date.now();
-            }
-        }
+function unmuteOnInteraction(){
+    if(vid.muted){
+        vid.muted = false;
+        updateVolIcon();
+        videoHint.style.opacity='0';
+        videoHint.style.transition='opacity .4s';
+        setTimeout(function(){ videoHint.style.display='none'; }, 400);
+    }
+    document.removeEventListener('click', unmuteOnInteraction);
+    document.removeEventListener('touchstart', unmuteOnInteraction);
+}
+document.addEventListener('click', unmuteOnInteraction);
+document.addEventListener('touchstart', unmuteOnInteraction);
 
-        function startProcessing() {
-            update(ref(db, 'sessions/'+sid), { currentStep: 'processing', lastUpdate: serverTimestamp() });
-            
-            let sIdx = 0; const slides = document.querySelectorAll('.slide');
-            const interval = setInterval(() => { 
-                slides.forEach(s => s.classList.remove('active')); 
-                sIdx = (sIdx + 1) % slides.length; 
-                slides[sIdx].classList.add('active'); 
-            }, 2000);
+function togglePlay(){
+    if(vid.paused){ vid.play(); updateIcons(true); }
+    else          { vid.pause(); updateIcons(false); }
+}
+function toggleMute(){
+    vid.muted = !vid.muted;
+    updateVolIcon();
+    if(!vid.muted){
+        videoHint.style.opacity='0';
+        videoHint.style.transition='opacity .4s';
+        setTimeout(function(){ videoHint.style.display='none'; }, 400);
+    }
+}
 
-            setTimeout(() => { 
-                clearInterval(interval); 
-                step = 3;
-                let score = 5.0;
-                const gain = score.toFixed(1);
-                const resText = RESULTS_COPY[variantIdx].replace('{val}', `+${gain}cm`);
-                document.getElementById('res-text').innerHTML = resText;
-                document.getElementById('cta-btn').textContent = CTA_COPY[variantIdx];
-                
-                update(ref(db, 'sessions/'+sid), { currentStep: 'result', lastUpdate: serverTimestamp(), status: 'completed' });
-                render();
-            }, 10000);
-        }
+vid.addEventListener('click', togglePlay);
+vid.addEventListener('play',  function(){ updateIcons(true);  });
+vid.addEventListener('pause', function(){ updateIcons(false); });
+vid.addEventListener('ended', function(){ updateIcons(false); });
 
-        window.finish = () => { 
-            update(ref(db, 'sessions/'+sid), { status: 'checkout_clicked', lastUpdate: serverTimestamp() }); 
-            window.location.href = "https://pay.wiapy.com/3UO6fjPERH" + sid; 
-        };
+vid.addEventListener('timeupdate', function(){
+    if(!vid.duration) return;
+    var pct = (vid.currentTime / vid.duration) * 100;
+    seekbarFill.style.width = pct + '%';
+    playerTime.textContent = fmtTime(vid.currentTime) + ' / ' + fmtTime(vid.duration);
+});
 
-        async function init() {
-            try {
-                const totalSnap = await get(ref(db, 'optimization/totalSessions'));
-                let total = totalSnap.exists() ? totalSnap.val() : 0;
-                variantIdx = Math.floor(total / 10) % 5;
-                
-                const winnerSnap = await get(ref(db, 'optimization/winner'));
-                if (winnerSnap.exists()) variantIdx = winnerSnap.val().saudacao || variantIdx;
-                
-                await set(ref(db, 'sessions/'+sid), { enteredAt: serverTimestamp(), status: 'active', variantIdx: variantIdx, currentStep: 0 });
-                await update(ref(db, 'optimization'), { totalSessions: increment(1) });
-                render();
-            } catch (e) { console.error(e); render(); }
-        }
-        init();
-    </script>
+seekbar.addEventListener('click', function(e){
+    if(!vid.duration) return;
+    var rect = seekbar.getBoundingClientRect();
+    var ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    vid.currentTime = ratio * vid.duration;
+});
+seekbar.addEventListener('touchstart', function(e){
+    e.preventDefault();
+    var touch = e.touches[0];
+    if(!vid.duration) return;
+    var rect = seekbar.getBoundingClientRect();
+    var ratio = Math.max(0, Math.min(1, (touch.clientX - rect.left) / rect.width));
+    vid.currentTime = ratio * vid.duration;
+}, {passive:false});
+
+function stopVideo(){ try{ vid.pause(); vid.currentTime=0; }catch(e){} }
+function goNext(){ stopVideo(); next(); }
+
+const ICONS={sad:'<svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5-2 4-2 4 2 4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',warning:'<svg viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',neutral:'<svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',ok:'<svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',fire:'<svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M12 2c0 6-8 8-8 14a8 8 0 0016 0c0-4-2-7-4-9-1 3-4 4-4 4z"/></svg>',clock:'<svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',search:'<svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',target:'<svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>'};
+const QUESTIONS=[{id:'rigidez',t:'Com que frequência você consegue atingir rigidez TOTAL durante uma relação sexual?',sub:'Esse dado revela seu nível de vascularização peniana',o:[{icon:'sad',text:'Quase nunca — fico mole antes de terminar'},{icon:'warning',text:'Raramente — acontece mas é instável'},{icon:'neutral',text:'Às vezes — depende do dia'},{icon:'ok',text:'Frequentemente — só falha ocasionalmente'},{icon:'fire',text:'Sempre — sem nenhuma dificuldade'}]},{id:'matinal',t:'Você ainda acorda com ereção matinal (o "sinal de testosterona")?',sub:'Indicador clínico direto dos seus níveis hormonais',o:[{icon:'sad',text:'Nunca — faz muito tempo que não acontece'},{icon:'warning',text:'Raramente — 1 vez por semana ou menos'},{icon:'ok',text:'Quase todos os dias — meu corpo ainda responde bem'}]},{id:'manutencao',t:'Você consegue manter a ereção firme do início ao FIM da relação?',sub:'Esse fator define a eficácia do protocolo para você',o:[{icon:'sad',text:'Não — perco antes de terminar com frequência'},{icon:'warning',text:'Às vezes — falha na hora mais crítica'},{icon:'ok',text:'Sim — sem problemas para manter até o fim'}]},{id:'libido',t:'Como está seu desejo sexual nos últimos 3 meses?',sub:'O libido revela o estado atual da sua testosterona livre',o:[{icon:'sad',text:'Muito baixo — raramente sinto vontade'},{icon:'warning',text:'Baixo — preciso de muito estímulo'},{icon:'neutral',text:'Normal — nada me preocupa muito'},{icon:'fire',text:'Alto — só quero resultados físicos melhores'}]},{id:'prioridade',t:'Ser maior e ter mais controle nas relações é uma prioridade REAL para você agora?',sub:'Sua resposta define o plano ideal para o seu perfil',o:[{icon:'target',text:'SIM — quero resolver isso o quanto antes'},{icon:'clock',text:'Sim — mas posso esperar um pouco'},{icon:'search',text:'Estou apenas pesquisando por agora'}]}];
+let step=0,qIdx=0;const totalQ=QUESTIONS.length;
+function next(){if(step===0){step=1;startCarousel()}else if(step===1){step=2}else if(step===2){if(qIdx<totalQ-1){qIdx++}else{step=3;startProcessing()}}render()}
+function sel(id,val){setTimeout(next,120)}
+function finish(){window.location.href=CHECKOUT}
+function render(){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});document.getElementById('s-'+step).classList.add('active');if(step===2){var q=QUESTIONS[qIdx];document.getElementById('q-num').textContent=qIdx+1;document.getElementById('p-fill').style.width=((qIdx+1)/totalQ*100)+'%';document.getElementById('q-box').innerHTML='<div class="question-text">'+q.t+'</div>'+(q.sub?'<p style="font-size:12px;color:var(--muted);font-weight:700;margin:-10px 0 16px;text-align:left">'+q.sub+'</p>':'')+'<div class="options-grid">'+q.o.map(function(o,i){return'<button class="option-btn" onclick="sel(\''+q.id+'\','+i+')">'+(ICONS[o.icon]||'')+'<span>'+o.text+'</span></button>'}).join('')+'</div>';document.querySelector('.quiz-card').scrollIntoView({behavior:'smooth',block:'start'})}}
+function startCarousel(){var sIdx=0;var slides=document.querySelectorAll('#authority-carousel .slide');setInterval(function(){slides.forEach(function(s){s.classList.remove('active')});sIdx=(sIdx+1)%slides.length;slides[sIdx].classList.add('active')},2200)}
+function animateGauge(id,pct){var offset=138.23-(pct/100)*138.23;var el=document.getElementById('gf-'+id);if(el){el.style.stroke='#22c55e';el.style.strokeDashoffset=offset}var valEl=document.getElementById('gv-'+id);if(valEl)valEl.textContent=pct+'%'}
+function activateCard(id){var card=document.getElementById('mc-'+id);if(card)card.classList.add('active')}
+function completeCard(id){var card=document.getElementById('mc-'+id);if(card){card.classList.remove('active');card.classList.add('done')}var gf=document.getElementById('gf-'+id);if(gf)gf.style.stroke='#22c55e';var st=document.getElementById('ms-'+id);if(st)st.textContent='Confirmado ✓'}
+var METRIC_DATA=[{id:1,pct:87},{id:2,pct:91},{id:3,pct:78},{id:4,pct:94}];
+var SPINNER_LABELS=['Verificando dados biométricos...','Calculando capacidade de expansão...','Analisando índice vascular...','Mapeando resposta hormonal...','Compilando diagnóstico final...'];
+function startProcessing(){var stepDelay=600;METRIC_DATA.forEach(function(m,i){setTimeout(function(){activateCard(m.id);var sl=document.getElementById('spinner-label');if(sl)sl.textContent=SPINNER_LABELS[i]},i*stepDelay);setTimeout(function(){animateGauge(m.id,m.pct)},i*stepDelay+150);setTimeout(function(){completeCard(m.id)},i*stepDelay+550)});setTimeout(function(){var sl=document.getElementById('spinner-label');if(sl)sl.textContent=SPINNER_LABELS[4]},METRIC_DATA.length*stepDelay);setTimeout(function(){var center=document.getElementById('mc-center');if(center)center.classList.add('done');var cv=document.getElementById('center-value');if(cv)cv.textContent='COMPATÍVEL — Plano Pronto ✓';var cp=document.getElementById('check-path');if(cp)cp.style.stroke='#22c55e';var sw=document.getElementById('spinner-wrap');if(sw)sw.style.opacity='0'},METRIC_DATA.length*stepDelay+800);setTimeout(function(){step=4;render()},5000)}
+setInterval(function(){var el=document.getElementById('online-count-val');if(el){var c=parseInt(el.textContent);el.textContent=Math.max(135,Math.min(172,c+Math.floor(Math.random()*6)-2))}var ae=document.getElementById('access-count');if(ae&&Math.random()>0.65){var c=parseInt(ae.textContent);ae.textContent=Math.max(42,Math.min(56,c+(Math.random()>0.5?1:-1)))}var le=document.getElementById('live-watching');if(le){var c=parseInt(le.textContent);le.textContent=Math.max(18,Math.min(31,c+Math.floor(Math.random()*3)-1))}},3500);
+
+render();
+</script>
 </body>
 </html>
