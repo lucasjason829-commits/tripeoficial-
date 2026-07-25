@@ -107,6 +107,148 @@
         .spinner-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
         @media(max-width:380px){body{padding:10px}.quiz-card{padding:16px 14px;border-radius:16px}.btn-next{padding:15px;font-size:15px}}
         @media(max-height:700px){.carousel{height:160px}}
+
+        /* ================================================================ */
+        /* ===== CHECKOUT EMBUTIDO (tela 6) — estilos isolados por ID ====== */
+        /* ================================================================ */
+        #checkout-screen{
+            --co-bg-card: #141414;
+            --co-border: #262626;
+            --co-accent: #e5372a;
+            --co-accent-dark: #b8281e;
+            --co-white: #f5f5f5;
+            --co-muted: #9a9a9a;
+            text-align:left;
+        }
+        #checkout-screen .hero-image{
+            width:100%;
+            aspect-ratio: 600/300;
+            background:#111 url('https://i.ibb.co/cXk4Qkw3/abd878c3be39e7e5de16-bonus.png') center/cover no-repeat;
+            border-bottom:2px solid var(--co-accent);
+            border-radius:12px 12px 0 0;
+        }
+        #checkout-screen .co-top-bar{
+            background:var(--co-accent);
+            color:#fff;
+            text-align:center;
+            padding:14px 20px;
+        }
+        #checkout-screen .co-top-bar strong{ display:block; font-size:15px; }
+        #checkout-screen .co-top-bar span{ display:block; font-size:12.5px; opacity:.85; margin-top:2px; }
+        #checkout-screen .co-section{ padding:16px 4px 0; }
+        #checkout-screen .co-offer-banner{
+            background:#1a1a1a;
+            border-left:3px solid var(--co-accent);
+            padding:10px 14px;
+            font-size:13px;
+            border-radius:4px;
+            color:var(--co-white);
+        }
+        #checkout-screen .co-offer-banner b{ color:var(--co-accent); }
+        #checkout-screen .co-title{
+            text-align:center;
+            font-size:16px;
+            font-weight:700;
+            margin:18px 0 14px;
+            color:var(--co-white);
+        }
+        #checkout-screen .co-title span{ color:var(--co-accent); }
+        #checkout-screen label{
+            display:block;
+            font-size:11.5px;
+            letter-spacing:.03em;
+            color:var(--co-muted);
+            margin-bottom:6px;
+            text-transform:uppercase;
+        }
+        #checkout-screen .co-field{ margin-bottom:14px; }
+        #checkout-screen input{
+            width:100%;
+            background:var(--co-bg-card);
+            border:1px solid var(--co-border);
+            color:var(--co-white);
+            padding:12px 14px;
+            border-radius:6px;
+            font-size:14px;
+        }
+        #checkout-screen input::placeholder{ color:#555; }
+        #checkout-screen input:focus{ outline:none; border-color:var(--co-accent); }
+        #checkout-screen .co-bump{
+            border:1px dashed var(--co-accent);
+            border-radius:8px;
+            margin-bottom:14px;
+            overflow:hidden;
+            background:var(--co-bg-card);
+        }
+        #checkout-screen .co-bump-tag{
+            background:var(--co-accent);
+            color:#fff;
+            font-size:11px;
+            font-weight:700;
+            padding:5px 10px;
+        }
+        #checkout-screen .co-bump-body{
+            display:flex;
+            gap:12px;
+            padding:12px;
+            align-items:center;
+        }
+        #checkout-screen .co-bump-img{
+            width:56px;height:56px;flex-shrink:0;
+            background:#222;
+            border-radius:6px;
+            overflow:hidden;
+        }
+        #checkout-screen .co-bump-img img{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+        }
+        #checkout-screen .co-bump-info{ flex:1; }
+        #checkout-screen .co-bump-info .co-name{ font-size:13.5px; font-weight:700; color:var(--co-white); }
+        #checkout-screen .co-bump-info .co-desc{ font-size:11.5px; color:var(--co-muted); margin:2px 0 4px; }
+        #checkout-screen .co-bump-info .co-price-old{ font-size:11px; color:#777; text-decoration:line-through; margin-right:6px; }
+        #checkout-screen .co-bump-info .co-price-new{ font-size:13px; color:var(--co-accent); font-weight:700; }
+        #checkout-screen .co-bump input[type=checkbox]{ width:18px; height:18px; accent-color: var(--co-accent); }
+        #checkout-screen .co-trust{
+            background:var(--co-bg-card);
+            border:1px solid var(--co-border);
+            border-radius:8px;
+            padding:14px;
+            font-size:12.5px;
+            color:var(--co-muted);
+            line-height:1.9;
+        }
+        #checkout-screen .co-total-row{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:16px 4px;
+            font-size:14px;
+            color:var(--co-white);
+        }
+        #checkout-screen .co-total-row .co-amount{ font-size:20px; font-weight:700; color:var(--co-accent); }
+        #checkout-screen .co-cta{
+            display:block;
+            width:100%;
+            background:linear-gradient(180deg,var(--co-accent),var(--co-accent-dark));
+            color:#fff;
+            border:none;
+            border-radius:8px;
+            padding:16px;
+            font-size:15px;
+            font-weight:800;
+            letter-spacing:.02em;
+            cursor:pointer;
+            text-transform:none;
+        }
+        #checkout-screen .co-cta:hover{ filter:brightness(1.05); }
+        #checkout-screen .co-footnote{
+            text-align:center;
+            font-size:11px;
+            color:#555;
+            margin-top:14px;
+        }
     </style>
 </head>
 <body>
@@ -224,10 +366,91 @@
         <p class="secure-footer">🔒 Compra 100% Segura e Sigilosa • Acesso Imediato</p>
     </div>
 
+    <!-- TELA 6: CHECKOUT (embutido, antes era o link externo) -->
+    <div id="s-5" class="screen">
+        <div id="checkout-screen">
+            <div class="hero-image"></div>
+
+            <div class="co-top-bar">
+                <strong>🔓 ACESSO LIBERADO — ÚLTIMA ETAPA</strong>
+                <span>Você está a 1 passo de receber o conteúdo completo no seu e-mail e WhatsApp</span>
+            </div>
+
+            <div class="co-section">
+                <div class="co-offer-banner">
+                    ⚡ Oferta de lançamento: <s>R$ 77,00</s> por <b>R$ 9,90</b> — condição válida só nesta página
+                </div>
+
+                <div class="co-title">PREENCHA OS DADOS PARA LIBERAR <span>O ACESSO COMPLETO</span></div>
+
+                <div class="co-field">
+                    <label>Nome completo</label>
+                    <input type="text" placeholder="Seu nome completo">
+                </div>
+                <div class="co-field">
+                    <label>E-mail</label>
+                    <input type="email" placeholder="seuemail@gmail.com">
+                </div>
+                <div class="co-field">
+                    <label>WhatsApp</label>
+                    <input type="tel" placeholder="(11) 99999-9999">
+                </div>
+                <div class="co-field">
+                    <label>CPF</label>
+                    <input type="text" placeholder="000.000.000-00">
+                </div>
+
+                <!-- ORDER BUMP 1 -->
+                <div class="co-bump">
+                    <div class="co-bump-tag">+ OFERTA ESPECIAL — ADICIONE AO SEU PEDIDO</div>
+                    <div class="co-bump-body">
+                        <div class="co-bump-img"><img src="https://i.ibb.co/C3gDmTBw/35d2b50adf745913f94e-design-sem-nome-1.jpg" alt="produto 1"></div>
+                        <div class="co-bump-info">
+                            <div class="co-name">GROSSURA MAXIMA</div>
+                            <div class="co-desc">Aumente a grossura do seu pênis até 10x mais rápido com exercícios práticos em vídeo.</div>
+                            <span class="co-price-old">R$ 27,00</span>
+                            <span class="co-price-new">apenas R$ 5,97</span>
+                        </div>
+                        <input type="checkbox">
+                    </div>
+                </div>
+
+                <!-- ORDER BUMP 2 -->
+                <div class="co-bump">
+                    <div class="co-bump-tag">★ MAIS PROCURADO — APROVEITE ENQUANTO HÁ VAGAS</div>
+                    <div class="co-bump-body">
+                        <div class="co-bump-img"><img src="https://i.ibb.co/3yhPxfCb/359e85ba3d55f3c835dd-99f02b36f7ffc31f5dd6-pg-03-01.png" alt="produto 2"></div>
+                        <div class="co-bump-info">
+                            <div class="co-name">GUIA DO COMEDOR</div>
+                            <div class="co-desc">Guia desenvolvido por uma mulher que revela o segredo que faz elas abrirem as pernas para você</div>
+                            <span class="co-price-old">R$ 27,00</span>
+                            <span class="co-price-new">apenas R$ 4,97</span>
+                        </div>
+                        <input type="checkbox">
+                    </div>
+                </div>
+
+                <div class="co-trust">
+                    🔒 Compra 100% segura — criptografia SSL<br>
+                    ⚡ Acesso imediato após confirmação do pagamento<br>
+                    🛡️ Garantia de 7 dias — devolução sem perguntas<br>
+                </div>
+
+                <div class="co-total-row">
+                    <span>Total a pagar:</span>
+                    <span class="co-amount">R$ 9,90</span>
+                </div>
+
+                <!-- este botão vai chamar a API do Mercado Pago (próximo passo) -->
+                <button class="co-cta" id="pay-btn">🔓 LIBERAR ACESSO COMPLETO — R$ 9,90</button>
+                <div class="co-footnote">Pagamento processado com segurança. Cancelamento garantido em até 7 dias.</div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
-const CHECKOUT = 'https://pay.wiapy.com/mm3kNpGy6Q';
 const vid = document.getElementById('main-video');
 const loadingEl = document.getElementById('video-loading');
 const seekbarFill = document.getElementById('seekbar-fill');
@@ -328,7 +551,7 @@ const QUESTIONS=[{id:'rigidez',t:'Com que frequência você consegue atingir rig
 let step=0,qIdx=0;const totalQ=QUESTIONS.length;
 function next(){if(step===0){step=1;startCarousel()}else if(step===1){step=2}else if(step===2){if(qIdx<totalQ-1){qIdx++}else{step=3;startProcessing()}}render()}
 function sel(id,val){setTimeout(next,120)}
-function finish(){window.location.href=CHECKOUT}
+function finish(){step=5;render()}
 function render(){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});document.getElementById('s-'+step).classList.add('active');if(step===2){var q=QUESTIONS[qIdx];document.getElementById('q-num').textContent=qIdx+1;document.getElementById('p-fill').style.width=((qIdx+1)/totalQ*100)+'%';document.getElementById('q-box').innerHTML='<div class="question-text">'+q.t+'</div>'+(q.sub?'<p style="font-size:12px;color:var(--muted);font-weight:700;margin:-10px 0 16px;text-align:left">'+q.sub+'</p>':'')+'<div class="options-grid">'+q.o.map(function(o,i){return'<button class="option-btn" onclick="sel(\''+q.id+'\','+i+')">'+(ICONS[o.icon]||'')+'<span>'+o.text+'</span></button>'}).join('')+'</div>';document.querySelector('.quiz-card').scrollIntoView({behavior:'smooth',block:'start'})}}
 function startCarousel(){var sIdx=0;var slides=document.querySelectorAll('#authority-carousel .slide');setInterval(function(){slides.forEach(function(s){s.classList.remove('active')});sIdx=(sIdx+1)%slides.length;slides[sIdx].classList.add('active')},2200)}
 function animateGauge(id,pct){var offset=138.23-(pct/100)*138.23;var el=document.getElementById('gf-'+id);if(el){el.style.stroke='#22c55e';el.style.strokeDashoffset=offset}var valEl=document.getElementById('gv-'+id);if(valEl)valEl.textContent=pct+'%'}
