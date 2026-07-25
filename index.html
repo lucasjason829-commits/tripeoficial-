@@ -451,40 +451,82 @@
 </div>
 
 <script>
-payBtn.addEventListener('click', async () => {
-  const nome = document.querySelector('input[placeholder="Seu nome completo"]').value;
-  const email = document.querySelector('input[placeholder="seuemail@gmail.com"]').value;
-  const whatsapp = document.querySelector('input[placeholder="(11) 99999-9999"]').value;
+  const payBtn = document.getElementById('pay-btn');
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
-  if (!nome || !email || !whatsapp) {
-    alert('Preencha todos os campos.');
-    return;
-  }
+  // AJUSTE ESSES VALORES conforme seus preços reais
+  const precoBase = 9.90;
+  const precoBump1 = 17.00; // valor do bump 1 (ajuste conforme o seu)
+  const precoBump2 = 27.00; // valor do bump 2 (ajuste conforme o seu)
 
-  const bumpsSelecionados = [];
-  if (checkboxes[0].checked) bumpsSelecionados.push('bump1');
-  if (checkboxes[1].checked) bumpsSelecionados.push('bump2');
+  payBtn.addEventListener('click', async () => {
+    const nome = document.querySelector('input[placeholder="Seu nome completo"]').value.trim();
+    const email = document.querySelector('input[placeholder="seuemail@gmail.com"]').value.trim();
+    const whatsapp = document.querySelector('input[placeholder="(11) 99999-9999"]').value.trim();
 
-  payBtn.disabled = true;
-  payBtn.textContent = 'Gerando pagamento...';
+    if (!nome || !email || !whatsapp) {
+      alert('Preencha todos os campos.');
+      return;
+    }
 
-  try {
-    const resp = await fetch('https://SEU-BACKEND.com/gerar-pagamento', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ nome, email, whatsapp, bumps: bumpsSelecionados })
+    // Soma o valor base + bumps marcados
+    let valorTotal = precoBase;
+    const bumpsSelecionados = [];
+    if (checkboxes[0] && checkboxes[0].checked) {
+      valorTotal += precoBump1;
+      bumpsSelecionados.push('bump1');
+    }
+    if (checkboxes[1] && checkboxes[1].checked) {
+      valorTotal += precoBump2;
+      bumpsSelecionados.push('bump2');
+    }
+
+    payBtn.disabled = true;
+    const textoOriginal = payBtn.textContent;
+    payBtn.textContent = 'Gerando Pix...';
+
+    try {
+      const resp = await fetch('https://SEU-BACKEND-REAL.com/gerar-pagamento', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nome,
+          email,
+          whatsapp,
+          valor: valorTotal.toFixed(2),
+          bumps: bumpsSelecionados
+        })
+      });
+
+      if (!resp.ok) throw new Error('Resposta não OK do servidor');
+
+      const data = await resp.json();
+      mostrarPixCode(data);
+
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao gerar Pix. Tente novamente.');
+      payBtn.disabled = false;
+      payBtn.textContent = textoOriginal;
+    }
+  });
+
+  function mostrarPixCode(pixData) {
+    // pixData.qr_code = o código copia-e-cola que sua API do Mercado Pago devolve
+    const container = document.createElement('div');
+    container.style.cssText = 'text-align:center; margin-top:20px; padding:20px; background:#141414; border-radius:8px; border:1px solid #262626;';
+    container.innerHTML = `
+      <p style="color:#f5f5f5; font-weight:700; margin-bottom:10px;">Copie o código Pix abaixo e pague no app do seu banco:</p>
+      <textarea readonly style="width:100%; height:70px; background:#0a0a0a; color:#f5f5f5; border:1px solid #262626; border-radius:6px; padding:8px; font-size:11px;">${pixData.qr_code}</textarea>
+      <button id="copiar-pix-btn" style="margin-top:10px; padding:10px 16px; background:#e5372a; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:700;">Copiar código Pix</button>
+    `;
+    payBtn.parentNode.insertBefore(container, payBtn.nextSibling);
+
+    document.getElementById('copiar-pix-btn').addEventListener('click', () => {
+      navigator.clipboard.writeText(pixData.qr_code);
+      alert('Código copiado!');
     });
-    const data = await resp.json();
-
-    // se for Checkout Pro (link de pagamento):
-    window.location.href = data.init_point;
-
-    // se for Pix direto (QR code), você mostraria data.qr_code_base64 na tela
-  } catch (err) {
-    alert('Erro ao gerar pagamento, tente novamente.');
-    payBtn.disabled = false;
   }
-});
 </script>
 </body>
 </html>
