@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Dados incompletos (nome, email, cpf, valor)' });
   }
 
-  const accessToken = process.env.MP_ACCESS_TOKEN;
+  const accessToken = process.env.MERCADOPAGO_ACCESS_TOKEN;
   if (!accessToken) {
     return res.status(500).json({ error: 'Access Token do Mercado Pago não configurado' });
   }
