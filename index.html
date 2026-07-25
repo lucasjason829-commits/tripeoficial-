@@ -451,86 +451,26 @@
 </div>
 
 <script>
-// ====== CÁLCULO DO TOTAL COM OS BUMPS ======
+<script>
+  // valores base
   const precoBase = 9.90;
   const precoBump1 = 5.97; // Grossura Máxima
   const precoBump2 = 4.97; // Guia do Comedor
 
-  const checkboxesBump = document.querySelectorAll('.bump input[type="checkbox"]');
-  const totalEl = document.querySelector('.co-amount');
+  const checkboxes = document.querySelectorAll('.bump input[type="checkbox"]');
+  const totalEl = document.querySelector('.co-amount'); // ou .amount, confira a classe certa
   const payBtn = document.getElementById('pay-btn');
 
   function atualizarTotal() {
     let total = precoBase;
-    if (checkboxesBump[0] && checkboxesBump[0].checked) total += precoBump1;
-    if (checkboxesBump[1] && checkboxesBump[1].checked) total += precoBump2;
+    if (checkboxes[0] && checkboxes[0].checked) total += precoBump1;
+    if (checkboxes[1] && checkboxes[1].checked) total += precoBump2;
 
     totalEl.textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
     payBtn.textContent = '🔒 LIBERAR ACESSO COMPLETO — R$ ' + total.toFixed(2).replace('.', ',');
   }
 
-  checkboxesBump.forEach(cb => cb.addEventListener('change', atualizarTotal));
-
-payBtn.addEventListener('click', async () => {
-  const nome = document.querySelector('input[placeholder="Seu nome completo"]').value.trim();
-  const email = document.querySelector('input[placeholder="seuemail@gmail.com"]').value.trim();
-  const whatsapp = document.querySelector('input[placeholder="(11) 99999-9999"]').value.trim();
-  const cpf = document.querySelector('input[placeholder="000.000.000-00"]').value.trim();
-
-  if (!nome || !email || !whatsapp || !cpf) {
-    alert('Preencha todos os campos antes de continuar.');
-    return;
-  }
-
-  let valorTotal = precoBase;
-  if (checkboxesBump[0] && checkboxesBump[0].checked) valorTotal += precoBump1;
-  if (checkboxesBump[1] && checkboxesBump[1].checked) valorTotal += precoBump2;
-
-  payBtn.disabled = true;
-  const textoOriginal = payBtn.textContent;
-  payBtn.textContent = 'Gerando Pix...';
-
-  try {
-    const resp = await fetch('/api/criar-pix', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        nome, email, cpf,
-        valor: valorTotal.toFixed(2),
-        descricao: 'Acesso completo ao conteúdo'
-      })
-    });
-
-    const data = await resp.json();
-
-    if (!resp.ok) {
-      alert('Erro ao gerar Pix. Tente novamente.');
-      payBtn.disabled = false;
-      payBtn.textContent = textoOriginal;
-      return;
-    }
-
-    mostrarQrCode(data);
-
-  } catch (err) {
-    alert('Erro de conexão. Tente novamente.');
-    payBtn.disabled = false;
-    payBtn.textContent = textoOriginal;
-  }
-});
-
-function mostrarQrCode(pixData) {
-  const container = document.createElement('div');
-  container.style.cssText = 'text-align:center; margin-top:20px; padding:20px; background:#141414; border-radius:8px; border:1px solid #262626;';
-  container.innerHTML = `
-    <p style="color:#f5f5f5; font-weight:700; margin-bottom:10px;">Escaneie o QR Code para pagar:</p>
-    <img src="data:image/png;base64,${pixData.qr_code_base64}" style="width:220px; height:220px; margin:0 auto; display:block;">
-    <p style="color:#9a9a9a; font-size:12px; margin-top:10px;">Ou copie o código Pix abaixo:</p>
-    <textarea readonly style="width:100%; height:60px; background:#0a0a0a; color:#f5f5f5; border:1px solid #262626; border-radius:6px; padding:8px; font-size:11px; margin-top:6px;">${pixData.qr_code}</textarea>
-    <button onclick="navigator.clipboard.writeText('${pixData.qr_code}'); alert('Código copiado!');" style="margin-top:10px; padding:10px 16px; background:#e5372a; color:#fff; border:none; border-radius:6px; cursor:pointer; font-weight:700;">Copiar código Pix</button>
-  `;
-  payBtn.parentNode.insertBefore(container, payBtn.nextSibling);
-}
+  checkboxes.forEach(cb => cb.addEventListener('change', atualizarTotal));
 </script>
 </body>
 </html>
