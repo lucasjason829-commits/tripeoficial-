@@ -768,7 +768,7 @@ function iniciarVerificacaoPix(paymentId){
     if(pixCheckInterval) clearInterval(pixCheckInterval);
     pixCheckInterval = setInterval(async function(){
         try{
-            var r = await fetch('/api/verificar-pix?id=' + paymentId);
+            var r = await fetch('/api/status-pix?id=' + paymentId);
             var d = await r.json();
             if(d.status === 'approved'){
                 clearInterval(pixCheckInterval);
