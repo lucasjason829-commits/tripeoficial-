@@ -249,6 +249,108 @@
             color:#555;
             margin-top:14px;
         }
+
+        /* ===== Etapa do Pix (dica, passo a passo, qr, código, status) ===== */
+        #checkout-screen .co-tip-box{
+            background:rgba(234,179,8,.08);
+            border:1px solid rgba(234,179,8,.35);
+            border-radius:8px;
+            padding:12px 14px;
+            font-size:12px;
+            color:#e5c869;
+            line-height:1.6;
+            margin-bottom:14px;
+        }
+        #checkout-screen .co-tip-box strong{ color:#f2d477; }
+        #checkout-screen .co-steps-box{
+            background:var(--co-bg-card);
+            border:1px solid var(--co-border);
+            border-radius:8px;
+            padding:14px;
+            margin-bottom:16px;
+        }
+        #checkout-screen .co-steps-title{
+            font-size:12px;
+            font-weight:800;
+            color:var(--co-white);
+            margin-bottom:10px;
+            text-transform:uppercase;
+            letter-spacing:.03em;
+        }
+        #checkout-screen .co-step-item{
+            display:flex;
+            gap:10px;
+            font-size:12.5px;
+            color:var(--co-muted);
+            margin-bottom:8px;
+            line-height:1.4;
+        }
+        #checkout-screen .co-step-item:last-child{ margin-bottom:0; }
+        #checkout-screen .co-step-num{
+            flex-shrink:0;
+            width:18px;height:18px;
+            border-radius:50%;
+            background:var(--co-accent);
+            color:#fff;
+            font-size:10px;
+            font-weight:800;
+            display:flex;align-items:center;justify-content:center;
+        }
+        #checkout-screen .co-qr-caption{
+            text-align:center;
+            font-size:11px;
+            font-weight:700;
+            color:var(--co-muted);
+            text-transform:uppercase;
+            letter-spacing:.04em;
+            margin-top:8px;
+        }
+        #checkout-screen .co-pix-code-box{
+            border:1px dashed var(--co-accent);
+            border-radius:8px;
+            padding:10px 12px;
+            font-size:10.5px;
+            color:var(--co-muted);
+            word-break:break-all;
+            background:var(--co-bg-card);
+            margin:14px 0 12px;
+            max-height:70px;
+            overflow-y:auto;
+        }
+        #checkout-screen .co-copy-btn{
+            display:flex;align-items:center;justify-content:center;gap:6px;
+            width:100%;
+            background:transparent;
+            border:1px solid var(--co-accent);
+            color:var(--co-accent);
+            border-radius:8px;
+            padding:13px;
+            font-size:13px;
+            font-weight:800;
+            cursor:pointer;
+        }
+        #checkout-screen .co-copy-btn:hover{ background:rgba(229,55,42,.08); }
+        #checkout-screen .co-status-row{
+            display:flex;align-items:center;justify-content:center;gap:8px;
+            margin-top:14px;
+            font-size:12.5px;
+            font-weight:700;
+            color:var(--co-muted);
+        }
+        #checkout-screen .co-status-dot{
+            width:8px;height:8px;border-radius:50%;
+            background:var(--co-accent);
+            animation:co-pulse 1.2s ease-in-out infinite;
+        }
+        #checkout-screen .co-status-row.aprovado{ color:#22c55e; }
+        #checkout-screen .co-status-row.aprovado .co-status-dot{
+            background:#22c55e;
+            animation:none;
+        }
+        @keyframes co-pulse{
+            0%,100%{ opacity:1; transform:scale(1); }
+            50%{ opacity:.4; transform:scale(.7); }
+        }
     </style>
 </head>
 <body>
@@ -445,14 +547,34 @@
                 <div class="co-footnote">Pagamento processado com segurança. Cancelamento garantido em até 7 dias.</div>
 
                 <!-- Resultado do Pix (some por padrão, aparece depois do clique) -->
-                <div id="pix-result" style="display:none; margin-top:16px; background:var(--co-bg-card); border:1px solid var(--co-border); border-radius:10px; padding:16px; text-align:center;">
-                    <p style="font-size:13px; font-weight:700; color:var(--co-white); margin-bottom:10px;">Escaneie o QR Code para pagar:</p>
-                    <img id="pix-qr-img" src="" alt="QR Code Pix" style="width:180px; height:180px; margin:0 auto 12px; display:block; border-radius:8px; background:#fff; padding:6px;">
-                    <p style="font-size:11px; color:var(--co-muted); margin-bottom:6px;">Ou copie o código Pix (copia e cola):</p>
-                    <textarea id="pix-copia-cola" readonly style="width:100%; min-height:60px; background:#0a0a0a; color:var(--co-white); border:1px solid var(--co-border); border-radius:6px; padding:8px; font-size:11px; margin-bottom:10px;"></textarea>
-                    <button type="button" class="co-cta" style="background:#2a2a2a;" onclick="copiarPix()">📋 Copiar código Pix</button>
+                <div id="pix-result" style="display:none;">
+
+                    <div class="co-tip-box">
+                        💡 <strong>Dica antes de pagar:</strong><br>
+                        Alguns bancos exibem um alerta automático em todo pagamento Pix pra produtos digitais — isso é só um aviso padrão do sistema bancário, não tem nada a ver com o nosso produto.<br><br>
+                        O pagamento é processado pelo <strong>Mercado Pago</strong>, maior plataforma de pagamentos da América Latina. Seu pagamento é 100% seguro e protegido ✅
+                    </div>
+
+                    <div class="co-steps-box">
+                        <div class="co-steps-title">📋 Como pagar com Pix:</div>
+                        <div class="co-step-item"><span class="co-step-num">1</span> Abra o aplicativo do seu banco ou carteira digital</div>
+                        <div class="co-step-item"><span class="co-step-num">2</span> Toque em <b>Pix → Pagar → Copia e Cola</b> ou escaneie o QR Code</div>
+                        <div class="co-step-item"><span class="co-step-num">3</span> Cole o código copiado ou aponte a câmera pro QR Code</div>
+                        <div class="co-step-item"><span class="co-step-num">4</span> Confirme o pagamento e aguarde a liberação do acesso no seu e-mail</div>
+                    </div>
+
+                    <img id="pix-qr-img" src="" alt="QR Code Pix" style="width:180px; height:180px; margin:0 auto; display:block; border-radius:8px; background:#fff; padding:8px; border:1px solid var(--co-border);">
+                    <div class="co-qr-caption">Escaneie o QR Code</div>
+
+                    <div class="co-pix-code-box" id="pix-copia-cola"></div>
+
+                    <button type="button" class="co-copy-btn" onclick="copiarPix()">📋 Copiar código Pix</button>
+
+                    <div class="co-status-row" id="pix-status-row">
+                        <span class="co-status-dot"></span>
+                        <span id="pix-status-text">Aguardando pagamento...</span>
+                    </div>
                 </div>
-                <p id="pix-status" style="text-align:center; font-size:12px; color:var(--co-muted); margin-top:10px;"></p>
             </div>
         </div>
     </div>
@@ -580,12 +702,10 @@ async function gerarPix(){
     var nome = document.getElementById('co-nome').value.trim();
     var email = document.getElementById('co-email').value.trim();
     var cpf = document.getElementById('co-cpf').value.replace(/\D/g,'');
-    var statusEl = document.getElementById('pix-status');
     var payBtn = document.getElementById('pay-btn');
 
     if(!nome || !email || !cpf){
-        statusEl.textContent = 'Preencha nome, e-mail e CPF pra gerar o Pix.';
-        statusEl.style.color = '#ef4444';
+        alert('Preencha nome, e-mail e CPF pra gerar o Pix.');
         return;
     }
 
@@ -596,8 +716,7 @@ async function gerarPix(){
 
     payBtn.disabled = true;
     payBtn.style.opacity = '0.7';
-    statusEl.style.color = 'var(--co-muted)';
-    statusEl.textContent = 'Gerando seu Pix, aguarde...';
+    payBtn.querySelector('#pay-btn-amount') && (payBtn.innerHTML = 'Gerando Pix...');
 
     try{
         var resposta = await fetch('/api/criar-pix', {
@@ -618,31 +737,56 @@ async function gerarPix(){
             throw new Error(dados.error || 'Erro ao gerar o Pix');
         }
 
+        // preenche QR code e código copia-e-cola
         document.getElementById('pix-qr-img').src = 'data:image/png;base64,' + dados.qr_code_base64;
-        document.getElementById('pix-copia-cola').value = dados.qr_code;
+        document.getElementById('pix-copia-cola').textContent = dados.qr_code;
+
+        // esconde o formulário e mostra só a etapa de pagamento
+        document.querySelectorAll('#checkout-screen .co-field').forEach(function(el){ el.style.display = 'none'; });
+        document.querySelectorAll('#checkout-screen .co-bump').forEach(function(el){ el.style.display = 'none'; });
+        document.querySelector('#checkout-screen .co-total-row').style.display = 'none';
+        payBtn.style.display = 'none';
+
         document.getElementById('pix-result').style.display = 'block';
-        statusEl.textContent = 'Pix gerado! Escaneie o QR Code ou copie o código acima.';
-        statusEl.style.color = '#22c55e';
-        document.getElementById('pix-result').scrollIntoView({behavior:'smooth', block:'center'});
+        document.getElementById('pix-result').scrollIntoView({behavior:'smooth', block:'start'});
+
+        // começa a verificar automaticamente se o pagamento caiu
+        if(dados.payment_id){ iniciarVerificacaoPix(dados.payment_id); }
 
     }catch(err){
         console.error(err);
-        statusEl.textContent = 'Não foi possível gerar o Pix agora. Tenta de novo em instantes.';
-        statusEl.style.color = '#ef4444';
-    }finally{
+        alert('Não foi possível gerar o Pix agora. Tenta de novo em instantes.');
         payBtn.disabled = false;
         payBtn.style.opacity = '1';
+        payBtn.innerHTML = '🔓 LIBERAR ACESSO COMPLETO — <span id="pay-btn-amount">' + fmtMoeda(total) + '</span>';
     }
 }
 
+var pixCheckInterval = null;
+
+function iniciarVerificacaoPix(paymentId){
+    if(pixCheckInterval) clearInterval(pixCheckInterval);
+    pixCheckInterval = setInterval(async function(){
+        try{
+            var r = await fetch('/api/verificar-pix?id=' + paymentId);
+            var d = await r.json();
+            if(d.status === 'approved'){
+                clearInterval(pixCheckInterval);
+                var row = document.getElementById('pix-status-row');
+                row.classList.add('aprovado');
+                document.getElementById('pix-status-text').textContent = 'Pagamento aprovado! Confira seu e-mail 🎉';
+            }
+        }catch(e){ console.error('Erro ao verificar pagamento:', e); }
+    }, 5000);
+}
+
 function copiarPix(){
-    var campo = document.getElementById('pix-copia-cola');
-    campo.select();
-    campo.setSelectionRange(0, 99999);
-    navigator.clipboard.writeText(campo.value).then(function(){
-        var statusEl = document.getElementById('pix-status');
-        statusEl.textContent = 'Código copiado! Cole no app do seu banco.';
-        statusEl.style.color = '#22c55e';
+    var texto = document.getElementById('pix-copia-cola').textContent;
+    navigator.clipboard.writeText(texto).then(function(){
+        var btn = document.querySelector('.co-copy-btn');
+        var original = btn.textContent;
+        btn.textContent = '✅ Código copiado!';
+        setTimeout(function(){ btn.textContent = original; }, 2000);
     });
 }
 /* =========================================================================== */
