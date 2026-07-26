@@ -744,6 +744,7 @@ async function gerarPix(){
         // esconde o formulário e mostra só a etapa de pagamento
         document.querySelectorAll('#checkout-screen .co-field').forEach(function(el){ el.style.display = 'none'; });
         document.querySelectorAll('#checkout-screen .co-bump').forEach(function(el){ el.style.display = 'none'; });
+        document.querySelector('#checkout-screen .co-trust').style.display = 'none';
         document.querySelector('#checkout-screen .co-total-row').style.display = 'none';
         payBtn.style.display = 'none';
 
