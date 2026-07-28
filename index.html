@@ -24,12 +24,18 @@
         .options-grid{display:grid;gap:12px;margin-bottom:20px}
         .option-btn{background:var(--card);border:2px solid var(--border);color:var(--text);padding:clamp(14px,4vw,18px) clamp(12px,3vw,16px);border-radius:12px;cursor:pointer;font-weight:700;transition:all .2s;font-size:clamp(14px,3.8vw,16px);text-align:left;line-height:1.3;width:100%;display:flex;align-items:center;gap:12px}
         .option-btn:hover,.option-btn:active{border-color:var(--primary);background:rgba(239,68,68,.1)}
+        .option-btn.selected{border-color:var(--primary);background:rgba(239,68,68,.2)}
         .option-btn svg{flex-shrink:0;width:20px;height:20px;opacity:.75}
         .urgency-badge{background:rgba(34,197,94,.15);border:2px solid var(--green);padding:10px 14px;border-radius:50px;display:inline-block;margin-bottom:18px;font-weight:900;color:var(--green);font-size:clamp(10px,2.8vw,12px);line-height:1.3}
         .carousel{width:100%;height:clamp(180px,45vw,250px);background:#000;border-radius:14px;margin:14px 0;overflow:hidden;position:relative;border:1px solid var(--border)}
         .slide{position:absolute;inset:0;opacity:0;transition:opacity .6s ease;display:flex;align-items:center;justify-content:center}
         .slide.active{opacity:1}.slide img{width:100%;height:100%;object-fit:contain}
         .slide-caption{position:absolute;bottom:8px;left:8px;right:8px;background:rgba(0,0,0,.85);padding:7px 10px;border-radius:8px;font-size:clamp(9px,2.5vw,11px);font-weight:700;color:var(--green);border:1px solid rgba(34,197,94,.3);text-align:center;z-index:10}
+        .loading-bar-container{text-align:left;margin-bottom:12px}
+        .loading-label{font-size:11px;color:var(--muted);margin-bottom:4px;display:block}
+        .loading-bar{height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+        .loading-fill{height:100%;background:var(--primary);width:0%;animation:co-load 2s infinite}
+        @keyframes co-load{0%{width:0%}50%{width:100%}100%{width:100%}}
         .analysis-dashboard{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
         .metric-card{background:#0a0a0a;border:1px solid var(--border);border-radius:12px;padding:14px 12px;text-align:center;position:relative;overflow:hidden;transition:border-color .4s ease}
         .metric-card.active{border-color:var(--primary)}.metric-card.done{border-color:var(--green)}
@@ -182,6 +188,42 @@
             margin-bottom:14px;
             line-height:1.25;
         }
+        #checkout-screen .co-steps-indicator{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:6px;
+            margin-bottom:20px;
+        }
+        #checkout-screen .co-step-ind{
+            display:flex;flex-direction:column;align-items:center;gap:4px;
+            font-size:9.5px;font-weight:800;letter-spacing:.03em;
+            color:var(--co-muted);
+        }
+        #checkout-screen .co-step-dot{
+            width:24px;height:24px;border-radius:50%;
+            display:flex;align-items:center;justify-content:center;
+            font-size:11px;font-weight:800;
+            border:1px solid var(--co-border);
+            background:var(--co-bg-card);
+            color:var(--co-muted);
+        }
+        #checkout-screen .co-step-ind.done .co-step-dot{ background:var(--green); color:#fff; border-color:var(--green); }
+        #checkout-screen .co-step-ind.done{ color:var(--green); }
+        #checkout-screen .co-step-ind.active .co-step-dot{ border-color:var(--co-accent); color:var(--co-accent); }
+        #checkout-screen .co-step-ind.active{ color:var(--co-accent); }
+        #checkout-screen .co-step-line{ width:26px; height:1px; background:var(--co-border); margin-bottom:14px; }
+        #checkout-screen .co-security-badge{
+            display:flex;
+            align-items:flex-start;
+            gap:8px;
+            font-size:11px;
+            color:var(--co-muted);
+            line-height:1.5;
+            margin-top:12px;
+            text-align:left;
+        }
+        #checkout-screen .co-security-badge b{ color:var(--co-white); }
         #checkout-screen .co-bump{
             border:2px solid var(--co-border);
             border-radius:12px;
@@ -454,16 +496,20 @@
 
     <!-- TELA 4: PROCESSAMENTO -->
     <div id="s-3" class="screen">
-        <div class="fixed-header">SISTEMA DE DIAGNÓSTICO AVANÇADO</div>
-        <h2 style="font-size:clamp(16px,4.5vw,20px);font-weight:900;margin-bottom:18px">ANALISANDO SEUS DADOS BIOMÉTRICOS</h2>
-        <div class="analysis-spinner-wrap" id="spinner-wrap"><div class="spinner-ring"></div><div class="spinner-label" id="spinner-label">Inicializando...</div></div>
-        <div class="analysis-dashboard">
-            <div class="metric-card" id="mc-1"><div class="gauge-wrap"><svg class="gauge-svg" width="56" height="56" viewBox="0 0 56 56"><circle class="gauge-bg" cx="28" cy="28" r="22"/><circle class="gauge-fill" id="gf-1" cx="28" cy="28" r="22" stroke="#ef4444"/></svg><div class="gauge-text" id="gv-1">—</div></div><div class="metric-label">Expansão Tecidual</div><div class="metric-status" id="ms-1">Aguardando</div></div>
-            <div class="metric-card" id="mc-2"><div class="gauge-wrap"><svg class="gauge-svg" width="56" height="56" viewBox="0 0 56 56"><circle class="gauge-bg" cx="28" cy="28" r="22"/><circle class="gauge-fill" id="gf-2" cx="28" cy="28" r="22" stroke="#ef4444"/></svg><div class="gauge-text" id="gv-2">—</div></div><div class="metric-label">Potencial de Crescimento</div><div class="metric-status" id="ms-2">Aguardando</div></div>
-            <div class="metric-card" id="mc-3"><div class="gauge-wrap"><svg class="gauge-svg" width="56" height="56" viewBox="0 0 56 56"><circle class="gauge-bg" cx="28" cy="28" r="22"/><circle class="gauge-fill" id="gf-3" cx="28" cy="28" r="22" stroke="#ef4444"/></svg><div class="gauge-text" id="gv-3">—</div></div><div class="metric-label">Índice Vascular</div><div class="metric-status" id="ms-3">Aguardando</div></div>
-            <div class="metric-card" id="mc-4"><div class="gauge-wrap"><svg class="gauge-svg" width="56" height="56" viewBox="0 0 56 56"><circle class="gauge-bg" cx="28" cy="28" r="22"/><circle class="gauge-fill" id="gf-4" cx="28" cy="28" r="22" stroke="#ef4444"/></svg><div class="gauge-text" id="gv-4">—</div></div><div class="metric-label">Resposta Hormonal</div><div class="metric-status" id="ms-4">Aguardando</div></div>
-            <div class="analysis-center" id="mc-center"><svg class="center-icon" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="19" stroke="#333" stroke-width="2"/><path d="M12 20l5 5 11-10" stroke="#444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" id="check-path"/></svg><div><div class="center-label">Compatibilidade com Protocolo</div><div class="center-value" id="center-value">Calculando...</div></div></div>
+        <div class="urgency-badge">🔥 <span id="proc-count">164</span> homens avaliando agora</div>
+        <div class="fixed-header">PROCESSANDO SEUS DADOS...</div>
+        <div class="carousel" id="processing-carousel">
+            <div class="slide active"><img src="https://metodotripe.shop/wp-content/uploads/2026/01/22109742.jpg" alt="Resultado"><div class="slide-caption">Ricardo, 34 anos • +4.2cm em 28 dias</div></div>
+            <div class="slide"><img src="https://metodotripe.shop/wp-content/uploads/2026/01/meaSaaTbaAaaaamhD_iLJzfk9u2QO-ZC1.jpg" alt="Resultado"><div class="slide-caption">Marcelo, 41 anos • +3.8cm em 30 dias</div></div>
+            <div class="slide"><img src="https://metodotripe.shop/wp-content/uploads/2026/02/02-.jpg" alt="Resultado"><div class="slide-caption">Felipe, 28 anos • +5.1cm em 35 dias</div></div>
         </div>
+        <div id="loading-steps">
+            <div class="loading-bar-container"><span class="loading-label">✓ Analisando tecidos cavernosos...</span><div class="loading-bar"><div class="loading-fill"></div></div></div>
+            <div class="loading-bar-container"><span class="loading-label">⏳ Verificando densidade dos corpos cavernosos...</span><div class="loading-bar"><div class="loading-fill" style="animation-delay:.5s"></div></div></div>
+            <div class="loading-bar-container"><span class="loading-label">⏳ Ajustando protocolo de expansão celular...</span><div class="loading-bar"><div class="loading-fill" style="animation-delay:1s"></div></div></div>
+            <div class="loading-bar-container"><span class="loading-label">⏳ Validando compatibilidade de tecidos...</span><div class="loading-bar"><div class="loading-fill" style="animation-delay:1.5s"></div></div></div>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-top:15px">Comparando com 10.847 casos de sucesso...</p>
     </div>
 
     <!-- TELA 5: OFERTA -->
@@ -493,6 +539,14 @@
 
             <div class="fixed-header" style="margin-top:16px">🔓 ÚLTIMA ETAPA — ACESSO LIBERADO</div>
             <h2 class="co-headline">GARANTA SEU ACESSO AGORA</h2>
+
+            <div class="co-steps-indicator">
+                <div class="co-step-ind done"><div class="co-step-dot">✓</div>DADOS</div>
+                <div class="co-step-line"></div>
+                <div class="co-step-ind active"><div class="co-step-dot">2</div>PAGAMENTO</div>
+                <div class="co-step-line"></div>
+                <div class="co-step-ind"><div class="co-step-dot">3</div>ACESSO</div>
+            </div>
 
             <div class="co-section">
                 <div class="co-offer-banner">
@@ -560,7 +614,10 @@
                 </div>
 
                 <button class="co-cta" id="pay-btn" onclick="gerarPix()">🔓 LIBERAR ACESSO COMPLETO — <span id="pay-btn-amount">R$ 9,90</span></button>
-                <div class="co-footnote">Pagamento processado com segurança. Cancelamento garantido em até 7 dias.</div>
+                <div class="co-security-badge">
+                    <span>🔒</span> Pagamento processado com segurança pelo <b>Mercado Pago</b> — maior plataforma de pagamentos da América Latina
+                </div>
+                <div class="co-footnote">Cancelamento garantido em até 7 dias.</div>
 
                 <!-- Resultado do Pix (some por padrão, aparece depois do clique) -->
                 <div id="pix-result" style="display:none;">
@@ -842,20 +899,25 @@ function copiarPix(){
 }
 /* =========================================================================== */
 
-const ICONS={sad:'<svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5-2 4-2 4 2 4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',warning:'<svg viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',neutral:'<svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="15" x2="16" y2="15"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',ok:'<svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',fire:'<svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M12 2c0 6-8 8-8 14a8 8 0 0016 0c0-4-2-7-4-9-1 3-4 4-4 4z"/></svg>',clock:'<svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',search:'<svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',target:'<svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>'};
-const QUESTIONS=[{id:'rigidez',t:'Com que frequência você consegue atingir rigidez TOTAL durante uma relação sexual?',sub:'Esse dado revela seu nível de vascularização peniana',o:[{icon:'sad',text:'Quase nunca — fico mole antes de terminar'},{icon:'warning',text:'Raramente — acontece mas é instável'},{icon:'neutral',text:'Às vezes — depende do dia'},{icon:'ok',text:'Frequentemente — só falha ocasionalmente'},{icon:'fire',text:'Sempre — sem nenhuma dificuldade'}]},{id:'matinal',t:'Você ainda acorda com ereção matinal (o "sinal de testosterona")?',sub:'Indicador clínico direto dos seus níveis hormonais',o:[{icon:'sad',text:'Nunca — faz muito tempo que não acontece'},{icon:'warning',text:'Raramente — 1 vez por semana ou menos'},{icon:'ok',text:'Quase todos os dias — meu corpo ainda responde bem'}]},{id:'manutencao',t:'Você consegue manter a ereção firme do início ao FIM da relação?',sub:'Esse fator define a eficácia do protocolo para você',o:[{icon:'sad',text:'Não — perco antes de terminar com frequência'},{icon:'warning',text:'Às vezes — falha na hora mais crítica'},{icon:'ok',text:'Sim — sem problemas para manter até o fim'}]},{id:'libido',t:'Como está seu desejo sexual nos últimos 3 meses?',sub:'O libido revela o estado atual da sua testosterona livre',o:[{icon:'sad',text:'Muito baixo — raramente sinto vontade'},{icon:'warning',text:'Baixo — preciso de muito estímulo'},{icon:'neutral',text:'Normal — nada me preocupa muito'},{icon:'fire',text:'Alto — só quero resultados físicos melhores'}]},{id:'prioridade',t:'Ser maior e ter mais controle nas relações é uma prioridade REAL para você agora?',sub:'Sua resposta define o plano ideal para o seu perfil',o:[{icon:'target',text:'SIM — quero resolver isso o quanto antes'},{icon:'clock',text:'Sim — mas posso esperar um pouco'},{icon:'search',text:'Estou apenas pesquisando por agora'}]}];
+const QUESTIONS=[{id:'rigidez',t:'Com que frequência você consegue atingir rigidez TOTAL durante uma relação sexual?',sub:'Esse dado revela seu nível de vascularização peniana',o:['Quase nunca — fico mole antes de terminar','Raramente — acontece mas é instável','Às vezes — depende do dia','Frequentemente — só falha ocasionalmente','Sempre — sem nenhuma dificuldade']},{id:'matinal',t:'Você ainda acorda com ereção matinal (o "sinal de testosterona")?',sub:'Indicador clínico direto dos seus níveis hormonais',o:['Nunca — faz muito tempo que não acontece','Raramente — 1 vez por semana ou menos','Quase todos os dias — meu corpo ainda responde bem']},{id:'manutencao',t:'Você consegue manter a ereção firme do início ao FIM da relação?',sub:'Esse fator define a eficácia do protocolo para você',o:['Não — perco antes de terminar com frequência','Às vezes — falha na hora mais crítica','Sim — sem problemas para manter até o fim']},{id:'libido',t:'Como está seu desejo sexual nos últimos 3 meses?',sub:'O libido revela o estado atual da sua testosterona livre',o:['Muito baixo — raramente sinto vontade','Baixo — preciso de muito estímulo','Normal — nada me preocupa muito','Alto — só quero resultados físicos melhores']},{id:'prioridade',t:'Ser maior e ter mais controle nas relações é uma prioridade REAL para você agora?',sub:'Sua resposta define o plano ideal para o seu perfil',o:['SIM — quero resolver isso o quanto antes','Sim — mas posso esperar um pouco','Estou apenas pesquisando por agora']}];
 let step=0,qIdx=0;const totalQ=QUESTIONS.length;
 function next(){if(step===0){step=1;startCarousel()}else if(step===1){step=2}else if(step===2){if(qIdx<totalQ-1){qIdx++}else{step=3;startProcessing()}}render()}
-function sel(id,val){setTimeout(next,120)}
+function sel(id,val,btn){
+    document.querySelectorAll('#q-box .option-btn').forEach(function(b){b.classList.remove('selected')});
+    if(btn) btn.classList.add('selected');
+    setTimeout(next,250);
+}
 function finish(){step=5;render()}
-function render(){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});document.getElementById('s-'+step).classList.add('active');if(step===2){var q=QUESTIONS[qIdx];document.getElementById('q-num').textContent=qIdx+1;document.getElementById('p-fill').style.width=((qIdx+1)/totalQ*100)+'%';document.getElementById('q-box').innerHTML='<div class="question-text">'+q.t+'</div>'+(q.sub?'<p style="font-size:12px;color:var(--muted);font-weight:700;margin:-10px 0 16px;text-align:left">'+q.sub+'</p>':'')+'<div class="options-grid">'+q.o.map(function(o,i){return'<button class="option-btn" onclick="sel(\''+q.id+'\','+i+')">'+(ICONS[o.icon]||'')+'<span>'+o.text+'</span></button>'}).join('')+'</div>';document.querySelector('.quiz-card').scrollIntoView({behavior:'smooth',block:'start'})}}
+function render(){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});document.getElementById('s-'+step).classList.add('active');if(step===2){var q=QUESTIONS[qIdx];document.getElementById('q-num').textContent=qIdx+1;document.getElementById('p-fill').style.width=((qIdx+1)/totalQ*100)+'%';document.getElementById('q-box').innerHTML='<div class="question-text">'+q.t+'</div>'+(q.sub?'<p style="font-size:12px;color:var(--muted);font-weight:700;margin:-10px 0 16px;text-align:left">'+q.sub+'</p>':'')+'<div class="options-grid">'+q.o.map(function(o,i){return'<button class="option-btn" onclick="sel(\''+q.id+'\','+i+',this)">'+o+'</button>'}).join('')+'</div>';document.querySelector('.quiz-card').scrollIntoView({behavior:'smooth',block:'start'})}}
 function startCarousel(){var sIdx=0;var slides=document.querySelectorAll('#authority-carousel .slide');setInterval(function(){slides.forEach(function(s){s.classList.remove('active')});sIdx=(sIdx+1)%slides.length;slides[sIdx].classList.add('active')},2200)}
-function animateGauge(id,pct){var offset=138.23-(pct/100)*138.23;var el=document.getElementById('gf-'+id);if(el){el.style.stroke='#22c55e';el.style.strokeDashoffset=offset}var valEl=document.getElementById('gv-'+id);if(valEl)valEl.textContent=pct+'%'}
-function activateCard(id){var card=document.getElementById('mc-'+id);if(card)card.classList.add('active')}
-function completeCard(id){var card=document.getElementById('mc-'+id);if(card){card.classList.remove('active');card.classList.add('done')}var gf=document.getElementById('gf-'+id);if(gf)gf.style.stroke='#22c55e';var st=document.getElementById('ms-'+id);if(st)st.textContent='Confirmado ✓'}
-var METRIC_DATA=[{id:1,pct:87},{id:2,pct:91},{id:3,pct:78},{id:4,pct:94}];
-var SPINNER_LABELS=['Verificando dados biométricos...','Calculando capacidade de expansão...','Analisando índice vascular...','Mapeando resposta hormonal...','Compilando diagnóstico final...'];
-function startProcessing(){var stepDelay=600;METRIC_DATA.forEach(function(m,i){setTimeout(function(){activateCard(m.id);var sl=document.getElementById('spinner-label');if(sl)sl.textContent=SPINNER_LABELS[i]},i*stepDelay);setTimeout(function(){animateGauge(m.id,m.pct)},i*stepDelay+150);setTimeout(function(){completeCard(m.id)},i*stepDelay+550)});setTimeout(function(){var sl=document.getElementById('spinner-label');if(sl)sl.textContent=SPINNER_LABELS[4]},METRIC_DATA.length*stepDelay);setTimeout(function(){var center=document.getElementById('mc-center');if(center)center.classList.add('done');var cv=document.getElementById('center-value');if(cv)cv.textContent='COMPATÍVEL — Plano Pronto ✓';var cp=document.getElementById('check-path');if(cp)cp.style.stroke='#22c55e';var sw=document.getElementById('spinner-wrap');if(sw)sw.style.opacity='0'},METRIC_DATA.length*stepDelay+800);setTimeout(function(){step=4;render()},5000)}
+function startCarousel2(){var sIdx=0;var slides=document.querySelectorAll('#processing-carousel .slide');return setInterval(function(){slides.forEach(function(s){s.classList.remove('active')});sIdx=(sIdx+1)%slides.length;slides[sIdx].classList.add('active')},2000)}
+function startProcessing(){
+    var carouselInterval = startCarousel2();
+    setTimeout(function(){
+        clearInterval(carouselInterval);
+        step=4;render();
+    }, 9000);
+}
 setInterval(function(){var el=document.getElementById('online-count-val');if(el){var c=parseInt(el.textContent);el.textContent=Math.max(135,Math.min(172,c+Math.floor(Math.random()*6)-2))}var ae=document.getElementById('access-count');if(ae&&Math.random()>0.65){var c=parseInt(ae.textContent);ae.textContent=Math.max(42,Math.min(56,c+(Math.random()>0.5?1:-1)))}var le=document.getElementById('live-watching');if(le){var c=parseInt(le.textContent);le.textContent=Math.max(18,Math.min(31,c+Math.floor(Math.random()*3)-1))}},3500);
 
 render();
