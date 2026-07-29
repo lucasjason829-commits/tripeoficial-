@@ -63,8 +63,26 @@
         .benefit-list{text-align:left;margin:20px 0}
         .benefit-item{display:flex;align-items:flex-start;margin-bottom:14px;font-size:clamp(13px,3.5vw,15px);font-weight:700;color:#fff;line-height:1.4}
         .benefit-item span{color:var(--green);margin-right:10px;font-size:clamp(16px,4vw,20px);flex-shrink:0;margin-top:-1px}
+
+        /* ===== Tela de resultado (mais séria/clínica) ===== */
+        .result-card{
+            background:#0d0d0d;
+            border:1px solid var(--border);
+            border-left:3px solid var(--green);
+            border-radius:14px;
+            padding:clamp(18px,4.5vw,26px);
+            margin:18px 0;
+            text-align:center;
+        }
+        .result-card-label{ font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; }
+        .result-range{ font-size:clamp(32px,9vw,42px); font-weight:900; color:var(--green); line-height:1; }
+        .result-card-sub{ font-size:clamp(12px,3.2vw,14px); color:#d1d5db; font-weight:600; margin-top:6px; }
+        .result-bar{ height:8px; background:var(--border); border-radius:10px; margin:16px 0 10px; overflow:hidden; }
+        .result-bar-fill{ height:100%; width:68%; background:linear-gradient(90deg,var(--primary),var(--green)); border-radius:10px; }
+        .result-basis{ font-size:11.5px; color:var(--muted); line-height:1.5; margin-top:4px; }
+        .result-proof{ font-size:clamp(11px,3vw,13px); color:var(--muted); font-weight:600; margin:14px 0; }
         .guarantee-box{display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.05);padding:clamp(12px,3vw,15px);border-radius:12px;margin:18px 0;border:1px dashed #444;gap:14px}
-        .guarantee-badge{width:clamp(40px,10vw,50px);height:auto;flex-shrink:0}
+        .guarantee-icon{font-size:clamp(32px,9vw,42px);flex-shrink:0}
         .guarantee-text{text-align:left}.guarantee-text p{font-size:clamp(11px,3vw,13px);line-height:1.4}
         .social-proof-live{font-size:clamp(11px,3vw,13px);color:var(--green);font-weight:700;margin:14px 0}
         .question-text{font-size:clamp(17px,4.8vw,22px);font-weight:900;margin-bottom:18px;line-height:1.35;text-align:left}
@@ -114,6 +132,36 @@
         @media(max-width:380px){body{padding:10px}.quiz-card{padding:16px 14px;border-radius:16px}.btn-next{padding:15px;font-size:15px}}
         @media(max-height:700px){.carousel{height:160px}}
 
+        #result-ticker{ transition:opacity .25s ease; }
+
+        #purchase-toast{
+            position:fixed;
+            left:14px;
+            bottom:14px;
+            z-index:999;
+            background:var(--card);
+            border:1px solid var(--border);
+            border-left:3px solid var(--green);
+            border-radius:10px;
+            padding:10px 14px;
+            display:flex;
+            align-items:center;
+            gap:8px;
+            font-size:11.5px;
+            font-weight:600;
+            color:#fff;
+            line-height:1.4;
+            box-shadow:0 8px 24px rgba(0,0,0,.5);
+            max-width:220px;
+            opacity:0;
+            transform:translateY(12px);
+            pointer-events:none;
+            transition:opacity .3s ease, transform .3s ease;
+        }
+        #purchase-toast.visible{ opacity:1; transform:translateY(0); }
+        #purchase-toast .pt-icon{ font-size:16px; flex-shrink:0; }
+        #purchase-toast .pt-time{ color:var(--muted); font-weight:600; font-size:10.5px; }
+
         /* ================================================================ */
         /* ===== CHECKOUT EMBUTIDO (tela 6) — estilos isolados por ID ====== */
         /* ================================================================ */
@@ -142,23 +190,6 @@
         #checkout-screen .co-top-bar strong{ display:block; font-size:12.5px; }
         #checkout-screen .co-top-bar span{ display:block; font-size:10.5px; opacity:.85; margin-top:1px; }
         #checkout-screen .co-section{ padding:16px 4px 0; }
-        #checkout-screen .co-offer-banner{
-            background:#1a1a1a;
-            border-left:3px solid var(--co-accent);
-            padding:10px 14px;
-            font-size:13px;
-            border-radius:4px;
-            color:var(--co-white);
-        }
-        #checkout-screen .co-offer-banner b{ color:var(--co-accent); }
-        #checkout-screen .co-title{
-            text-align:center;
-            font-size:16px;
-            font-weight:700;
-            margin:18px 0 14px;
-            color:var(--co-white);
-        }
-        #checkout-screen .co-title span{ color:var(--co-accent); }
         #checkout-screen label{
             display:block;
             font-size:11.5px;
@@ -179,21 +210,12 @@
         }
         #checkout-screen input::placeholder{ color:#555; }
         #checkout-screen input:focus{ outline:none; border-color:var(--co-accent); }
-        #checkout-screen .co-headline{
-            font-size:clamp(18px,5vw,22px);
-            font-weight:900;
-            color:var(--co-white);
-            text-align:center;
-            text-transform:uppercase;
-            margin-bottom:14px;
-            line-height:1.25;
-        }
         #checkout-screen .co-steps-indicator{
             display:flex;
             align-items:center;
             justify-content:center;
             gap:6px;
-            margin-bottom:20px;
+            margin:14px 0 20px;
         }
         #checkout-screen .co-step-ind{
             display:flex;flex-direction:column;align-items:center;gap:4px;
@@ -224,26 +246,40 @@
             text-align:left;
         }
         #checkout-screen .co-security-badge b{ color:var(--co-white); }
-        #checkout-screen .co-bump{
-            border:2px solid var(--co-border);
+
+        #checkout-screen .co-order-summary{
+            background:var(--co-bg-card);
+            border:1px solid var(--co-border);
             border-radius:12px;
-            margin-bottom:14px;
-            overflow:hidden;
+            padding:14px 16px;
+            margin-bottom:18px;
+        }
+        #checkout-screen .co-order-row{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+        #checkout-screen .co-order-title{ font-size:13.5px; font-weight:700; color:var(--co-white); }
+        #checkout-screen .co-order-sub{ font-size:11px; color:var(--co-muted); margin-top:3px; }
+        #checkout-screen .co-order-price{ font-size:16px; font-weight:900; color:var(--co-white); white-space:nowrap; }
+        #checkout-screen .co-order-strike{ font-size:11px; color:var(--co-accent); font-weight:700; margin-top:8px; padding-top:8px; border-top:1px dashed var(--co-border); }
+
+        #checkout-screen .co-block-title{
+            font-size:11px;
+            font-weight:800;
+            color:var(--co-muted);
+            text-transform:uppercase;
+            letter-spacing:.06em;
+            margin:20px 0 10px;
+        }
+
+        #checkout-screen .co-bump{
+            border:1px solid var(--co-border);
+            border-radius:12px;
+            margin-bottom:12px;
             background:var(--co-bg-card);
             cursor:pointer;
-            transition:border-color .2s, transform .15s;
+            transition:border-color .2s, box-shadow .2s;
         }
-        #checkout-screen .co-bump:hover{ transform:translateY(-1px); }
         #checkout-screen .co-bump.co-bump-selected{
             border-color:var(--co-accent);
-            box-shadow:0 4px 14px rgba(239,68,68,.18);
-        }
-        #checkout-screen .co-bump-tag{
-            background:var(--co-accent);
-            color:#fff;
-            font-size:11px;
-            font-weight:700;
-            padding:5px 10px;
+            box-shadow:0 4px 14px rgba(239,68,68,.15);
         }
         #checkout-screen .co-bump-body{
             display:flex;
@@ -252,9 +288,9 @@
             align-items:center;
         }
         #checkout-screen .co-bump-img{
-            width:56px;height:56px;flex-shrink:0;
+            width:52px;height:52px;flex-shrink:0;
             background:#222;
-            border-radius:6px;
+            border-radius:8px;
             overflow:hidden;
         }
         #checkout-screen .co-bump-img img{
@@ -262,12 +298,37 @@
             height:100%;
             object-fit:cover;
         }
-        #checkout-screen .co-bump-info{ flex:1; }
-        #checkout-screen .co-bump-info .co-name{ font-size:13.5px; font-weight:700; color:var(--co-white); }
-        #checkout-screen .co-bump-info .co-desc{ font-size:11.5px; color:var(--co-muted); margin:2px 0 4px; }
-        #checkout-screen .co-bump-info .co-price-old{ font-size:11px; color:#777; text-decoration:line-through; margin-right:6px; }
-        #checkout-screen .co-bump-info .co-price-new{ font-size:13px; color:var(--co-accent); font-weight:700; }
-        #checkout-screen .co-bump input[type=checkbox]{ width:20px; height:20px; accent-color: var(--co-accent); flex-shrink:0; cursor:pointer; }
+        #checkout-screen .co-bump-info{ flex:1; min-width:0; }
+        #checkout-screen .co-bump-badge{
+            display:inline-block;
+            font-size:9px;
+            font-weight:800;
+            color:var(--co-accent);
+            background:rgba(239,68,68,.12);
+            border-radius:5px;
+            padding:2px 7px;
+            text-transform:uppercase;
+            letter-spacing:.03em;
+            margin-bottom:4px;
+        }
+        #checkout-screen .co-bump-badge-alt{ color:#f2b90b; background:rgba(242,185,11,.12); }
+        #checkout-screen .co-bump-info .co-name{ font-size:13px; font-weight:700; color:var(--co-white); }
+        #checkout-screen .co-bump-info .co-desc{ font-size:11px; color:var(--co-muted); margin:2px 0 5px; line-height:1.4; }
+        #checkout-screen .co-price-row{ display:flex; align-items:center; gap:8px; }
+        #checkout-screen .co-price-old{ font-size:11px; color:#777; text-decoration:line-through; }
+        #checkout-screen .co-price-new{ font-size:13px; color:var(--green); font-weight:800; }
+        #checkout-screen .co-switch{ position:relative; width:42px; height:24px; flex-shrink:0; display:inline-block; }
+        #checkout-screen .co-switch input{ opacity:0; width:0; height:0; position:absolute; }
+        #checkout-screen .co-switch-slider{
+            position:absolute; inset:0; background:#333; border-radius:24px; transition:.2s;
+        }
+        #checkout-screen .co-switch-slider:before{
+            content:''; position:absolute; width:18px; height:18px; left:3px; top:3px;
+            background:#fff; border-radius:50%; transition:.2s;
+        }
+        #checkout-screen .co-switch input:checked + .co-switch-slider{ background:var(--co-accent); }
+        #checkout-screen .co-switch input:checked + .co-switch-slider:before{ transform:translateX(18px); }
+
         #checkout-screen .co-trust-list{ margin:16px 0; }
         #checkout-screen .co-trust-item{
             display:flex;
@@ -512,33 +573,42 @@
         <p style="font-size:12px;color:var(--muted);margin-top:15px">Comparando com 10.847 casos de sucesso...</p>
     </div>
 
-    <!-- TELA 5: OFERTA -->
+    <!-- TELA 5: RESULTADO -->
     <div id="s-4" class="screen">
-        <div class="fixed-header">✓ AVALIAÇÃO CONCLUÍDA</div>
-        <h2 style="font-size:clamp(17px,4.8vw,20px);font-weight:900;margin-bottom:18px">SEU PLANO PERSONALIZADO DE 45 DIAS ESTÁ PRONTO</h2>
-        <div class="result-hero"><div class="result-label">VOCÊ PODE GANHAR</div><div class="result-number">4 – 7 CM</div><div class="result-label">DE COMPRIMENTO + GROSSURA</div><p class="result-subtext">Baseado no seu nível vascular, histórico de ereção e urgência declarada</p></div>
-        <div class="urgency-timer">⚠️ <span id="access-count">47</span> HOMENS PEGARAM ACESSO NAS ÚLTIMAS 4 HORAS</div>
+        <div class="fixed-header">✓ Avaliação concluída</div>
+
+        <div class="result-card">
+            <div class="result-card-label">Seu resultado personalizado</div>
+            <div class="result-range">4 – 7 cm</div>
+            <div class="result-card-sub">de ganho estimado em comprimento e grossura</div>
+            <div class="result-bar"><div class="result-bar-fill"></div></div>
+            <p class="result-basis">Estimativa baseada no seu nível vascular, histórico de ereção e respostas do questionário.</p>
+        </div>
+
         <div class="benefit-list">
-            <div class="benefit-item"><span>✓</span> Ganhe de 3 a 7cm de comprimento PERMANENTE</div>
-            <div class="benefit-item"><span>✓</span> Primeiras medições visíveis em apenas 21 dias</div>
-            <div class="benefit-item"><span>✓</span> Ereções 3x mais firmes e duradouras a partir do dia 30</div>
-            <div class="benefit-item"><span>✓</span> Zero cirurgias, aparelhos ou medicamentos</div>
-            <div class="benefit-item"><span>✓</span> Ela vai SENTIR a diferença (e te agradecer)</div>
+            <div class="benefit-item"><span>✓</span> Ganho de comprimento permanente, sem cirurgia</div>
+            <div class="benefit-item"><span>✓</span> Primeiras medições visíveis em cerca de 21 dias</div>
+            <div class="benefit-item"><span>✓</span> Ereções mais firmes e duradouras a partir do dia 30</div>
+            <div class="benefit-item"><span>✓</span> Sem aparelhos, medicamentos ou procedimentos invasivos</div>
             <div class="benefit-item"><span>✓</span> Garantia incondicional de 30 dias</div>
         </div>
-        <div class="social-proof-live">🟢 <span id="live-watching">23</span> pessoas visualizando esta oferta agora</div>
-        <div class="guarantee-box"><img src="https://metodotripe.shop/wp-content/uploads/2026/04/ChatGPT-Image-19-de-abr.-de-2026-19_12_11-1.png" class="guarantee-badge" alt="Garantia"><div class="guarantee-text"><p style="font-weight:900;color:#fff">MÉTODO BICARBONATO</p><p style="font-weight:900;color:var(--green)">GARANTIA TOTAL DE 30 DIAS</p><p style="color:var(--muted)">Satisfação 100% ou seu dinheiro de volta</p></div></div>
-        <button class="btn-next" onclick="finish()">ACESSAR MEU PLANO DE 45 DIAS AGORA</button>
-        <p class="secure-footer">🔒 Compra 100% Segura e Sigilosa • Acesso Imediato</p>
+
+        <div class="result-proof" id="result-ticker">👥 25 pessoas concluíram essa avaliação nas últimas 24h</div>
+
+        <div class="guarantee-box"><div class="guarantee-icon">🛡️</div><div class="guarantee-text"><p style="font-weight:900;color:var(--green)">Garantia total de 30 dias</p><p style="color:var(--muted)">Satisfação garantida ou seu dinheiro de volta</p></div></div>
+
+        <button class="btn-next" onclick="finish()">Acessar meu protocolo completo</button>
+        <p class="secure-footer">🔒 Avaliação confidencial • Sem compromisso</p>
     </div>
 
-    <!-- TELA 6: CHECKOUT (embutido no próprio quiz, com a cara do funil) -->
+
+    <!-- TELA 6: CHECKOUT (embutido, visual novo) -->
     <div id="s-5" class="screen">
+        <div id="purchase-toast"></div>
         <div id="checkout-screen">
             <div class="hero-image"></div>
 
-            <div class="fixed-header" style="margin-top:16px">🔓 ÚLTIMA ETAPA — ACESSO LIBERADO</div>
-            <h2 class="co-headline">GARANTA SEU ACESSO AGORA</h2>
+            <div class="fixed-header" style="margin-top:16px">🔒 Finalize sua compra</div>
 
             <div class="co-steps-indicator">
                 <div class="co-step-ind done"><div class="co-step-dot">✓</div>DADOS</div>
@@ -549,57 +619,71 @@
             </div>
 
             <div class="co-section">
-                <div class="co-offer-banner">
-                    ⚡ Oferta de lançamento: <s>R$ 77,00</s> por <b>R$ 9,90</b> — condição válida só nesta página
+
+                <div class="co-order-summary">
+                    <div class="co-order-row">
+                        <div>
+                            <div class="co-order-title">Protocolo Bicarbonato — acesso completo</div>
+                            <div class="co-order-sub">Liberado imediatamente após confirmação do pagamento</div>
+                        </div>
+                        <div class="co-order-price">R$ 9,90</div>
+                    </div>
+                    <div class="co-order-strike"><s>De R$ 77,00</s> — oferta válida só nesta página</div>
                 </div>
 
-                <div class="co-title">PREENCHA SEUS DADOS <span>ABAIXO</span></div>
-
-                <div class="co-field">
-                    <label>👤 Nome completo</label>
-                    <input type="text" id="co-nome" placeholder="Seu nome completo">
-                </div>
-                <div class="co-field">
-                    <label>📧 E-mail</label>
-                    <input type="email" id="co-email" placeholder="seuemail@gmail.com">
-                </div>
-                <div class="co-field">
-                    <label>📱 WhatsApp</label>
-                    <input type="tel" id="co-whatsapp" inputmode="numeric" maxlength="15" placeholder="(11) 99999-9999" oninput="this.value=formatarTelefone(this.value)">
-                </div>
-                <div class="co-field">
-                    <label>🪪 CPF</label>
-                    <input type="text" id="co-cpf" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" oninput="this.value=formatarCPF(this.value)">
-                </div>
+                <div class="co-block-title">Adicione ao seu pedido</div>
 
                 <!-- ORDER BUMP 1 -->
                 <div class="co-bump" id="bump-card-1" onclick="toggleBump(1, event)">
-                    <div class="co-bump-tag">+ OFERTA ESPECIAL — ADICIONE AO SEU PEDIDO</div>
                     <div class="co-bump-body">
                         <div class="co-bump-img"><img src="https://i.ibb.co/C3gDmTBw/35d2b50adf745913f94e-design-sem-nome-1.jpg" alt="produto 1"></div>
                         <div class="co-bump-info">
-                            <div class="co-name">GROSSURA MAXIMA</div>
+                            <div class="co-bump-badge">Oferta especial</div>
+                            <div class="co-name">Grossura Máxima</div>
                             <div class="co-desc">Aumente a grossura do seu pênis até 10x mais rápido com exercícios práticos em vídeo.</div>
-                            <span class="co-price-old">R$ 27,00</span>
-                            <span class="co-price-new">apenas R$ 5,97</span>
+                            <div class="co-price-row"><span class="co-price-old">R$ 27,00</span><span class="co-price-new">R$ 5,97</span></div>
                         </div>
-                        <input type="checkbox" id="bump-1" data-price="5.97" onchange="updateTotal()" onclick="event.stopPropagation()">
+                        <label class="co-switch">
+                            <input type="checkbox" id="bump-1" data-price="5.97" onchange="updateTotal()">
+                            <span class="co-switch-slider"></span>
+                        </label>
                     </div>
                 </div>
 
                 <!-- ORDER BUMP 2 -->
                 <div class="co-bump" id="bump-card-2" onclick="toggleBump(2, event)">
-                    <div class="co-bump-tag">★ MAIS PROCURADO — APROVEITE ENQUANTO HÁ VAGAS</div>
                     <div class="co-bump-body">
                         <div class="co-bump-img"><img src="https://i.ibb.co/3yhPxfCb/359e85ba3d55f3c835dd-99f02b36f7ffc31f5dd6-pg-03-01.png" alt="produto 2"></div>
                         <div class="co-bump-info">
-                            <div class="co-name">GUIA DO COMEDOR</div>
-                            <div class="co-desc">Guia desenvolvido por uma mulher que revela o segredo que faz elas abrirem as pernas para você</div>
-                            <span class="co-price-old">R$ 27,00</span>
-                            <span class="co-price-new">apenas R$ 4,97</span>
+                            <div class="co-bump-badge co-bump-badge-alt">Mais procurado</div>
+                            <div class="co-name">Guia do Comedor</div>
+                            <div class="co-desc">Guia desenvolvido por uma mulher que revela o segredo que faz elas abrirem as pernas para você.</div>
+                            <div class="co-price-row"><span class="co-price-old">R$ 27,00</span><span class="co-price-new">R$ 4,97</span></div>
                         </div>
-                        <input type="checkbox" id="bump-2" data-price="4.97" onchange="updateTotal()" onclick="event.stopPropagation()">
+                        <label class="co-switch">
+                            <input type="checkbox" id="bump-2" data-price="4.97" onchange="updateTotal()">
+                            <span class="co-switch-slider"></span>
+                        </label>
                     </div>
+                </div>
+
+                <div class="co-block-title">Seus dados para acesso</div>
+
+                <div class="co-field">
+                    <label>Nome completo</label>
+                    <input type="text" id="co-nome" placeholder="Seu nome completo">
+                </div>
+                <div class="co-field">
+                    <label>E-mail</label>
+                    <input type="email" id="co-email" placeholder="seuemail@gmail.com">
+                </div>
+                <div class="co-field">
+                    <label>WhatsApp</label>
+                    <input type="tel" id="co-whatsapp" inputmode="numeric" maxlength="15" placeholder="(11) 99999-9999" oninput="this.value=formatarTelefone(this.value)">
+                </div>
+                <div class="co-field">
+                    <label>CPF</label>
+                    <input type="text" id="co-cpf" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" oninput="this.value=formatarCPF(this.value)">
                 </div>
 
                 <div class="co-trust-list">
@@ -613,7 +697,7 @@
                     <span class="co-amount" id="co-total-amount">R$ 9,90</span>
                 </div>
 
-                <button class="co-cta" id="pay-btn" onclick="gerarPix()">🔓 LIBERAR ACESSO COMPLETO — <span id="pay-btn-amount">R$ 9,90</span></button>
+                <button class="co-cta" id="pay-btn" onclick="gerarPix()">Pagar com Pix — <span id="pay-btn-amount">R$ 9,90</span></button>
                 <div class="co-security-badge">
                     <span>🔒</span> Pagamento processado com segurança pelo <b>Mercado Pago</b> — maior plataforma de pagamentos da América Latina
                 </div>
@@ -788,10 +872,8 @@ function fmtMoeda(v){
 }
 
 function toggleBump(n, evt){
-    if(evt && evt.target && evt.target.tagName === 'INPUT') return;
-    var cb = document.getElementById('bump-' + n);
-    cb.checked = !cb.checked;
-    updateTotal();
+    if(evt && evt.target && evt.target.closest('.co-switch')) return;
+    document.getElementById('bump-' + n).click();
 }
 
 function updateTotal(){
@@ -851,6 +933,8 @@ async function gerarPix(){
         // esconde o formulário e mostra só a etapa de pagamento
         document.querySelectorAll('#checkout-screen .co-field').forEach(function(el){ el.style.display = 'none'; });
         document.querySelectorAll('#checkout-screen .co-bump').forEach(function(el){ el.style.display = 'none'; });
+        document.querySelectorAll('#checkout-screen .co-block-title').forEach(function(el){ el.style.display = 'none'; });
+        document.querySelector('#checkout-screen .co-order-summary').style.display = 'none';
         document.querySelector('#checkout-screen .co-trust-list').style.display = 'none';
         document.querySelector('#checkout-screen .co-total-row').style.display = 'none';
         payBtn.style.display = 'none';
@@ -907,9 +991,48 @@ function sel(id,val,btn){
     if(btn) btn.classList.add('selected');
     setTimeout(next,250);
 }
-function finish(){step=5;render()}
-function render(){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});document.getElementById('s-'+step).classList.add('active');if(step===2){var q=QUESTIONS[qIdx];document.getElementById('q-num').textContent=qIdx+1;document.getElementById('p-fill').style.width=((qIdx+1)/totalQ*100)+'%';document.getElementById('q-box').innerHTML='<div class="question-text">'+q.t+'</div>'+(q.sub?'<p style="font-size:12px;color:var(--muted);font-weight:700;margin:-10px 0 16px;text-align:left">'+q.sub+'</p>':'')+'<div class="options-grid">'+q.o.map(function(o,i){return'<button class="option-btn" onclick="sel(\''+q.id+'\','+i+',this)">'+o+'</button>'}).join('')+'</div>';document.querySelector('.quiz-card').scrollIntoView({behavior:'smooth',block:'start'})}}
+function finish(){step=5;render();startPurchaseToasts()}
+function render(){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active')});document.getElementById('s-'+step).classList.add('active');if(step===2){var q=QUESTIONS[qIdx];document.getElementById('q-num').textContent=qIdx+1;document.getElementById('p-fill').style.width=((qIdx+1)/totalQ*100)+'%';document.getElementById('q-box').innerHTML='<div class="question-text">'+q.t+'</div>'+(q.sub?'<p style="font-size:12px;color:var(--muted);font-weight:700;margin:-10px 0 16px;text-align:left">'+q.sub+'</p>':'')+'<div class="options-grid">'+q.o.map(function(o,i){return'<button class="option-btn" onclick="sel(\''+q.id+'\','+i+',this)">'+o+'</button>'}).join('')+'</div>';document.querySelector('.quiz-card').scrollIntoView({behavior:'smooth',block:'start'})}if(step===4){startResultTicker()}}
 function startCarousel(){var sIdx=0;var slides=document.querySelectorAll('#authority-carousel .slide');setInterval(function(){slides.forEach(function(s){s.classList.remove('active')});sIdx=(sIdx+1)%slides.length;slides[sIdx].classList.add('active')},2200)}
+/* ===================== PROVA SOCIAL DINÂMICA ===================== */
+var NOMES_PROVA = ['Pedro','João','Lucas','Marcos','Rafael','Bruno','Felipe','Carlos','Diego','Thiago','André','Gabriel'];
+var TICKER_MSGS = [
+    function(){ return (5+Math.floor(Math.random()*10)) + ' pessoas acabaram de concluir a avaliação'; },
+    function(){ return NOMES_PROVA[Math.floor(Math.random()*NOMES_PROVA.length)] + ' levou o protocolo há ' + (2+Math.floor(Math.random()*8)) + ' minutos'; },
+    function(){ return (8+Math.floor(Math.random()*10)) + ' pessoas levaram o protocolo nas últimas horas'; }
+];
+var resultTickerInterval = null;
+function startResultTicker(){
+    var el = document.getElementById('result-ticker');
+    if(!el || resultTickerInterval) return;
+    var i = 0;
+    resultTickerInterval = setInterval(function(){
+        i = (i+1) % TICKER_MSGS.length;
+        el.style.opacity = '0';
+        setTimeout(function(){
+            el.innerHTML = '👥 ' + TICKER_MSGS[i]();
+            el.style.opacity = '1';
+        }, 250);
+    }, 3500);
+}
+
+var purchaseToastInterval = null;
+function startPurchaseToasts(){
+    if(purchaseToastInterval) return;
+    var toast = document.getElementById('purchase-toast');
+    if(!toast) return;
+    function show(){
+        var nome = NOMES_PROVA[Math.floor(Math.random()*NOMES_PROVA.length)];
+        var tempos = ['agora mesmo','há 1 minuto','há 2 minutos','há 5 minutos'];
+        var tempo = tempos[Math.floor(Math.random()*tempos.length)];
+        toast.innerHTML = '<span class="pt-icon">✅</span><span><b>' + nome + '</b> garantiu o acesso<br><span class="pt-time">' + tempo + '</span></span>';
+        toast.classList.add('visible');
+        setTimeout(function(){ toast.classList.remove('visible'); }, 3000);
+    }
+    setTimeout(show, 1200);
+    purchaseToastInterval = setInterval(show, 4500);
+}
+/* =========================================================================== */
 function startCarousel2(){var sIdx=0;var slides=document.querySelectorAll('#processing-carousel .slide');return setInterval(function(){slides.forEach(function(s){s.classList.remove('active')});sIdx=(sIdx+1)%slides.length;slides[sIdx].classList.add('active')},2000)}
 function startProcessing(){
     var carouselInterval = startCarousel2();
