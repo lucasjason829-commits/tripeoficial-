@@ -175,11 +175,11 @@
             text-align:left;
         }
         #checkout-screen .hero-image{
-            width:100%;
+            width:calc(100% + clamp(18px,5vw,30px) * 2);
+            margin:calc(clamp(18px,5vw,30px) * -1) calc(clamp(18px,5vw,30px) * -1) 0;
             aspect-ratio: 600/300;
             background:#111 url('https://i.ibb.co/MktjLcSG/Design-sem-nome.jpg') center/cover no-repeat;
-            border-bottom:2px solid var(--co-accent);
-            border-radius:12px 12px 0 0;
+            border-radius:20px 20px 0 0;
         }
         #checkout-screen .co-top-bar{
             background:var(--co-accent);
@@ -236,16 +236,12 @@
         #checkout-screen .co-step-ind.active{ color:var(--co-accent); }
         #checkout-screen .co-step-line{ width:26px; height:1px; background:var(--co-border); margin-bottom:14px; }
         #checkout-screen .co-security-badge{
-            display:flex;
-            align-items:flex-start;
-            gap:8px;
             font-size:11px;
             color:var(--co-muted);
             line-height:1.5;
             margin-top:12px;
-            text-align:left;
+            text-align:center;
         }
-        #checkout-screen .co-security-badge b{ color:var(--co-white); }
 
         #checkout-screen .co-order-summary{
             background:var(--co-bg-card);
@@ -608,7 +604,7 @@
         <div id="checkout-screen">
             <div class="hero-image"></div>
 
-            <div class="fixed-header" style="margin-top:16px">🔒 Finalize sua compra</div>
+            <div class="fixed-header" style="margin-top:16px;text-align:center">🔒 Finalize sua compra</div>
 
             <div class="co-steps-indicator">
                 <div class="co-step-ind done"><div class="co-step-dot">✓</div>DADOS</div>
@@ -667,7 +663,7 @@
                     </div>
                 </div>
 
-                <div class="co-block-title">Seus dados para acesso</div>
+                <div class="co-block-title" style="text-align:center">Seus dados para acesso</div>
 
                 <div class="co-field">
                     <label>Nome completo</label>
@@ -698,9 +694,7 @@
                 </div>
 
                 <button class="co-cta" id="pay-btn" onclick="gerarPix()">Pagar com Pix — <span id="pay-btn-amount">R$ 9,90</span></button>
-                <div class="co-security-badge">
-                    <span>🔒</span> Pagamento processado com segurança pelo <b>Mercado Pago</b> — maior plataforma de pagamentos da América Latina
-                </div>
+                <div class="co-security-badge">🔒 Pagamento processado com segurança</div>
                 <div class="co-footnote">Cancelamento garantido em até 7 dias.</div>
 
                 <!-- Resultado do Pix (some por padrão, aparece depois do clique) -->
@@ -938,6 +932,8 @@ async function gerarPix(){
         document.querySelector('#checkout-screen .co-trust-list').style.display = 'none';
         document.querySelector('#checkout-screen .co-total-row').style.display = 'none';
         payBtn.style.display = 'none';
+        document.querySelector('#checkout-screen .co-security-badge').style.display = 'none';
+        document.querySelector('#checkout-screen .co-footnote').style.display = 'none';
 
         document.getElementById('pix-result').style.display = 'block';
         document.getElementById('pix-result').scrollIntoView({behavior:'smooth', block:'start'});
